@@ -1,10 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:store_app/models/all_product/all_product.dart';
 import 'package:store_app/models/product/product.dart';
-import 'package:store_app/models/test_product/datum.dart';
-import 'package:store_app/models/test_product/test_product.dart';
 import 'package:store_app/view/widgets/productListView.dart';
 
 class ProductListBuilder2 extends StatefulWidget {

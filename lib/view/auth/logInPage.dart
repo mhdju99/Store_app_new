@@ -1,11 +1,9 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:store_app/core/viewmodel/AuthenticationManager%20.dart';
 import 'package:store_app/core/viewmodel/auth_viewnodel.dart';
 import 'package:store_app/view/auth/signUpPage.dart';
-import 'package:store_app/view/1.dart';
 import 'package:store_app/view/widgets/CustomButton.dart';
 import 'package:store_app/view/widgets/CustomTextField.dart';
 import 'package:store_app/view/widgets/buttonText.dart';
@@ -13,6 +11,8 @@ import 'package:store_app/view/widgets/buttonText.dart';
 class LogIn extends StatelessWidget {
   LogIn({super.key});
   final formkey = GlobalKey<FormState>();
+  AuthenticationManager cc = Get.put(AuthenticationManager());
+
   AuthController authControlar = Get.put(AuthController());
 
   @override
@@ -50,6 +50,7 @@ class LogIn extends StatelessWidget {
                       child: Column(
                         children: [
                           CustomTextField(
+                            initial: cc.getemail(),
                             text: "Email",
                             onSave: (val) {
                               authControlar.email = val;
@@ -63,6 +64,7 @@ class LogIn extends StatelessWidget {
                             height: 7,
                           ),
                           CustomTextField(
+                            initial: cc.getPassword(),
                             onSave: (val) {
                               authControlar.password = val;
                             },
@@ -110,8 +112,12 @@ class LogIn extends StatelessWidget {
                         onPressed: () {
                           formkey.currentState!.save();
                           if (formkey.currentState!.validate()) {
-                            controlar.isLoading.value= true;
-                            authControlar.login();
+                            controlar.isLoading.value = true;
+                            cc.saveUser(
+                                authControlar.email, authControlar.password);
+                       authControlar.login();
+                   
+
                           } else {
                             Get.snackbar(
                                 "error", " error in username or password");

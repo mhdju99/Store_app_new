@@ -1,9 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:store_app/core/services/get_all_product.dart';
-import 'package:store_app/models/cart_model.dart';
 import 'package:store_app/models/product/product.dart';
 
 class HomeControllar extends GetxController {

@@ -1,16 +1,8 @@
-import 'dart:math';
-
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
-import 'package:icons_plus/icons_plus.dart';
-import 'package:insta_image_viewer/insta_image_viewer.dart';
-import 'package:store_app/core/viewmodel/AuthenticationManager%20.dart';
 import 'package:store_app/core/viewmodel/cart_viewmodel.dart';
 import 'package:store_app/models/product/product.dart';
-import 'package:store_app/view/widgets/CustomButton.dart';
-import 'package:store_app/view/widgets/buttonText.dart';
 
 class Cart extends StatelessWidget {
   Cart({super.key});

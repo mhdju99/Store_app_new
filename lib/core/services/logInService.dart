@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:store_app/core/class/api.dart';
-import 'package:store_app/models/Login_Respons_Model.dart';
+import 'package:store_app/core/constants/end_points.dart';
 import 'package:store_app/models/login_model.dart';
 
 class LogInServices {
@@ -8,21 +8,34 @@ class LogInServices {
   LogInServices({
     required this.dio,
   });
-  Future<Response?> logIn({
+  Future<userModel?> logIn({
     required String email,
     required String password,
   }) async {
-   try {
-      Response? data = await Api()
-        .post(url: "https://api.escuelajs.co/api/v1/auth/login", body: {
+    Response? response =
+        await Api().post(endpoint: EndPoints.login_endpoint, body: {
       "email": email,
       "password": password,
     });
-    print(data.toString());
-    return data;
-   } on DioException catch(e) {
-
-     return e.response;
-   }
+    userModel? user;
+    if (response != null) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Map<String, dynamic> responses = response.data;
+        Map<String, dynamic> item = responses["user"];
+        String token = responses["token"];
+        user = userModel(
+            name: item["name"],
+            token: token,
+            email: item["email"],
+            id: item["_id"]);
+        print("ssssssssssssssssss");
+        print(user.toString());
+        return user;
+      } else {
+        return user;
+      }
+    } else {
+      return user;
+    }
   }
 }

@@ -1,10 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:dio/dio.dart';
 import 'package:store_app/core/class/api.dart';
-import 'package:store_app/models/all_product/all_product.dart';
-import 'package:store_app/models/product/product.dart';
 import 'package:store_app/models/test_product/datum.dart';
-import 'package:store_app/models/test_product/test_product.dart';
 
 class GetAllProduct2 {
   final Dio dio;
@@ -13,7 +10,7 @@ class GetAllProduct2 {
   });
   Future<List<Datum>?> get() async {
     Response? response =
-        await Api().get(url: "http://192.168.43.191:8080/api/v1/product");
+        await Api().get(endpoint: "http://192.168.43.191:8080/api/v1/product");
     List<Datum> allProductList = [];
 
     if (response != null) {

@@ -11,7 +11,7 @@ final  baseUrl="https://fakestoreapi.com/products";
   });
   Future<List<products>?> getwishlist() async {
     Response? response =
-        await Api().get(url: baseUrl);
+        await Api().get(endpoint: baseUrl);
     List<products> allProductList = [];
 
     if (response != null) {
@@ -30,15 +30,15 @@ final  baseUrl="https://fakestoreapi.com/products";
   }
 Future<void> addProductToWishlist(int productId) async {
     final response =
-        await Api().post(url: '$baseUrl/wishlist', body: {'product_id': productId});
+        await Api().post(endpoint: '$baseUrl/wishlist', body: {'product_id': productId});
     if (response!.statusCode != 200|| response.statusCode == 201) {
       throw Exception('Failed to add product to wishlist');
     }
   }
 
   Future<void> removeProductFromWishlist(int productId) async {
-    final response = await Api().del(url: '$baseUrl/wishlist/$productId');
-    if (response.statusCode != 200) {
+    final response = await Api().del(endpoint: '$baseUrl/wishlist/$productId');
+    if (response!.statusCode != 200) {
       throw Exception('Failed to remove product from wishlist');
     }
   }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
   final String text;
+  final String? initial;
   String? Function(String?)? validate;
   void Function(String?)? onSave;
   TextInputType? type;
@@ -11,6 +12,7 @@ class CustomTextField extends StatelessWidget {
     Key? key,
     required this.text,
     this.type,
+    this.initial,
     this.validate,
     this.onSave
   }) : super(key: key);
@@ -18,11 +20,13 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      initialValue: initial,
       keyboardType: type,
       obscureText: type == TextInputType.visiblePassword ? true : false,
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.symmetric(vertical: 15),
         prefixIcon: const Icon(Icons.person),
+        
         labelText: text,
         floatingLabelBehavior: FloatingLabelBehavior.never,
         floatingLabelAlignment: FloatingLabelAlignment.start,

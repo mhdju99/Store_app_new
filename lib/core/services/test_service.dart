@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:dio/dio.dart';
 import 'package:store_app/core/class/api.dart';
-import 'package:store_app/models/product/product.dart';
 import 'package:store_app/models/test_product/test_product.dart';
 
 class test_service {
@@ -11,7 +10,7 @@ class test_service {
   });
   Future<List<TestProduct>?> get() async {
     Response? response =
-        await Api().get(url: "https://fakestoreapi.com/products");
+        await Api().get(endpoint: "https://fakestoreapi.com/products");
     List<TestProduct> allProductList = [];
 
     if (response != null) {

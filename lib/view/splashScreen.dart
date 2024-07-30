@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:store_app/core/viewmodel/AuthenticationManager%20.dart';
 import 'package:get/get.dart';
+import 'package:store_app/core/viewmodel/AuthenticationManager%20.dart';
 import 'package:store_app/view/onBorder.dart';
 
 class SplashView extends StatelessWidget {
@@ -10,7 +10,6 @@ class SplashView extends StatelessWidget {
 
   Future<void> initializeSettings() async {
     _authmanager.checkLoginStatus();
-
     //Simulate other services for 3 seconds
     await Future.delayed(const Duration(seconds: 3));
   }

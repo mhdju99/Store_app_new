@@ -10,7 +10,7 @@ class GetAllProduct {
   });
   Future<List<products>?> get() async {
     Response? response =
-        await Api().get(url: "https://fakestoreapi.com/products");
+        await Api().get(endpoint: "https://fakestoreapi.com/products");
     List<products> allProductList = [];
 
     if (response != null) {

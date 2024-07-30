@@ -1,15 +1,15 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:store_app/core/services/logInService.dart';
 import 'package:store_app/core/services/signUpServices.dart';
 import 'package:store_app/core/viewmodel/AuthenticationManager%20.dart';
-import 'package:store_app/models/Login_Respons_Model.dart';
-import 'package:store_app/view/auth/logInPage.dart';
+import 'package:store_app/core/viewmodel/userController.dart';
+import 'package:store_app/view/LandingPage.dart';
 import 'package:store_app/view/onBorder.dart';
 
 class AuthController extends GetxController {
   late AuthenticationManager _authManager;
+  userController cc = Get.put(userController());
   RxBool isLoading = false.obs;
   String? email, password, name;
   @override
@@ -42,7 +42,7 @@ class AuthController extends GetxController {
         email: email.toString(),
         password: password.toString());
     isLoading.value = false;
-    if (result.statusCode == 200 || result.statusCode == 201) {
+    if (result!.statusCode == 200 || result.statusCode == 201) {
       Get.snackbar("success", "success");
       Get.offAll(const OnBoard());
     } else {
@@ -50,18 +50,23 @@ class AuthController extends GetxController {
           result.statusCode.toString(), result.statusMessage.toString());
     }
   }
-
-  login() async {
+ login() async {
     var result = await LogInServices(
       dio: Dio(),
     ).logIn(email: email.toString(), password: password.toString());
     isLoading.value = false;
-    if (result!.statusCode == 200 || result.statusCode == 201) {
-      LoginResponsModel loginres = LoginResponsModel.fromJson(result.data);
-      _authManager.login(loginres.token);
+    if (result != null) {
+      _authManager.login(result.token);
+      cc.email = result.email;
+      cc.id = result.id;
+      cc.name = result.name;
+                                Get.offAll(LandingPage(),
+                               );
+                               
+
     } else {
-      Get.snackbar(
-          result.statusCode.toString(), result.statusMessage.toString());
+      Get.snackbar(".", "errror");
+
     }
   }
 }

@@ -11,7 +11,7 @@ class GetProductCatogery {
   });
   Future<List<products>?> get({required String category}) async {
     Response? response = await Api()
-        .get(url: "https://fakestoreapi.com/products/category/$category");
+        .get(endpoint: "https://fakestoreapi.com/products/category/$category");
     List<products> allProductList = [];
 
  

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:store_app/core/viewmodel/landing_viewmodel.dart';
 
-
 class LandingPage extends StatelessWidget {
   LandingPage({super.key});
 
-  LandingPageController lading = Get.put(LandingPageController());
+  LandingPageController lading =
+      Get.put(LandingPageController(), permanent: false);
 
   @override
   Widget build(BuildContext context) {

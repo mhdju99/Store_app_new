@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:store_app/helper/db_helper.dart';
 import 'package:store_app/models/cart_model.dart';
@@ -44,9 +43,7 @@ class CartController extends GetxController {
   getallProduct() async {
     List<Cart>? db = await Sqllite().getAll();
     _product = db;
-    print(db);
-    print("ssssssssssssssaaaa");
-    print(db!.length);
+
 
     update();
   }

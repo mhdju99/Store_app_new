@@ -1,12 +1,25 @@
-class LoginModel {
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+class userModel {
+	String? name;
+	String? token;
 	String? email;
-	String? password;
+	String? id;
 
-	LoginModel({this.email, this.password});
+	userModel({this.name,
+    this.token,    this.email,
 
-	factory LoginModel.fromJson(Map<String, dynamic> json) => LoginModel(
-				email: json['email'] as String?,
-				password: json['password'] as String?,
+        this.id,
+
+  });
+
+	factory userModel.fromJson(Map<String, dynamic> json) => userModel(
+				name: json['email'] as String?,
+				token: json['token'] as String?,
 			);
 
+
+  @override
+  String toString() {
+    return 'userModel(name: $name, token: $token, email: $email, id: $id)';
+  }
 }

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:store_app/view/cart.dart';
-import 'package:store_app/view/home_page.dart';
-
 import 'package:store_app/view/splashScreen.dart';
 
 void main() async {
@@ -22,7 +19,10 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return  GetMaterialApp(
-        debugShowCheckedModeBanner: false, home: SplashView());
+    return GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        home:
+            //  LandingPage()
+            SplashView());
   }
 }
