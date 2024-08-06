@@ -2,6 +2,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:store_app/core/services/get_product_catogery.dart';
+import 'package:store_app/view/widgets/CategoryproductListBuilder.dart';
 import 'package:store_app/view/widgets/productListBuilder%20copy.dart';
 
 
@@ -23,9 +24,7 @@ class catogeryproduct extends StatelessWidget {
         child: CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [
-            ProductListBuilder2(
-              future: GetProductCatogery(dio: Dio()).get(category: category ),
-            )
+            CategoryProductListBuilder(cato: category)
           ],
         ),
       ),

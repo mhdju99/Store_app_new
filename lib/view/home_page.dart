@@ -2,12 +2,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:store_app/core/viewmodel/categoryController.dart';
 import 'package:store_app/core/viewmodel/homePage_viewmodel.dart';
+import 'package:store_app/models/poduct_model.dart';
 import 'package:store_app/models/product/product.dart';
 import 'package:store_app/view/itemDetail%20.dart';
 import 'package:store_app/view/widgets/productListBuilder.dart';
 import 'package:store_app/view/widgets/product_item.dart';
-import 'package:store_app/view/widgets/widget.dart';
+import 'package:store_app/view/widgets/catogoreWidget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -27,12 +29,13 @@ class _pageOneState extends State<HomePage> {
   ];
 
   HomeControllar cc = Get.put(HomeControllar());
+  categoryController gg = Get.put(categoryController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+      padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
       child: RefreshIndicator(
         onRefresh: () async {
           cc.refresh();
@@ -65,7 +68,7 @@ class _pageOneState extends State<HomePage> {
                         onPressed: () {},
                         icon: const Icon(
                           Icons.menu,
-                          size: 40,
+                          size: 30,
                         )),
                   )
                 ],
@@ -73,12 +76,12 @@ class _pageOneState extends State<HomePage> {
             ),
             const SliverToBoxAdapter(
               child: SizedBox(
-                height: 40,
+                height: 10,
               ),
             ),
             const SliverToBoxAdapter(
               child: Text(
-                "Catogery",
+                "Category",
                 style: TextStyle(
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
@@ -87,21 +90,30 @@ class _pageOneState extends State<HomePage> {
             ),
             const SliverToBoxAdapter(
               child: SizedBox(
-                height: 30,
+                height: 20,
               ),
             ),
             SliverToBoxAdapter(
               child: SizedBox(
-                height: 140,
+                height: 130,
                 width: double.infinity,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: catogery.length,
-                  itemBuilder: (BuildContext, i) {
-                    return catogore(
-                        icon: catogery[i]["icon"], name: catogery[i]["name"]);
-                  },
-                ),
+                child: Obx(() {
+                  if (!cc.loading.value) {
+                    return gg.category.isNotEmpty
+                        ? ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: gg.category.length,
+                            itemBuilder: (BuildContext, i) {
+                              var item = gg.category[i];
+                              return catogore(
+                                  name: item.categoryName.toString());
+                            },
+                          )
+                        : const Center(child: Text("no data"));
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                }),
               ),
             ),
             SliverToBoxAdapter(
@@ -109,7 +121,7 @@ class _pageOneState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
-                    "Best salling",
+                    "All Products",
                     style: TextStyle(
                       fontSize: 25,
                       fontWeight: FontWeight.bold,
@@ -137,7 +149,7 @@ class _pageOneState extends State<HomePage> {
 }
 
 class search extends SearchDelegate {
-  List<products> filter = [];
+  List<ProductData> filter = [];
   HomeControllar cc;
   search({
     required this.cc,
@@ -166,7 +178,8 @@ class search extends SearchDelegate {
   Widget buildResults(BuildContext context) {
     if (query != "") {
       filter = cc.product!
-          .where((element) => element.title!.contains(query))
+          .where((element) =>
+              element.title.toLowerCase().contains(query.toLowerCase()))
           .toList();
       return buildResuilt(filter: filter);
     } else {
@@ -201,7 +214,8 @@ class search extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) {
     if (query != "") {
       filter = cc.product!
-          .where((element) => element.title!.contains(query))
+          .where((element) =>
+              element.title.toLowerCase().contains(query.toLowerCase()))
           .toList();
       return ListView.builder(
           itemCount: filter.length,
@@ -212,10 +226,10 @@ class search extends SearchDelegate {
               },
               child: Card(
                 child: ListTile(
-                  title: Text(filter[index].title!.substring(1, 7)),
-                  leading: Image.network(filter[index].image!),
+                  title: Text(filter[index].title),
+                  leading: Image.network(filter[index].imageCovered),
                   subtitle: Text(
-                    filter[index].price!.toString(),
+                    "${filter[index].repoInfo.price!.toString()} s.p",
                     style: const TextStyle(
                         fontWeight: FontWeight.bold, color: Colors.orange),
                   ),
@@ -228,15 +242,12 @@ class search extends SearchDelegate {
       return Center(
         child: Column(
           children: [
-            Container(
+            SizedBox(
               height: 200,
               width: 200,
-            
-              child: Image.asset(
-                "assets/images/search-product.png"
-                 ),
+              child: Image.asset("assets/images/search-product.png"),
             ),
-            Text(
+            const Text(
               "Serrch your product",
               style: TextStyle(
                 color: Colors.grey,
@@ -257,7 +268,7 @@ class buildResuilt extends StatelessWidget {
     required this.filter,
   });
 
-  final List<products> filter;
+  final List<ProductData> filter;
 
   @override
   Widget build(BuildContext context) {

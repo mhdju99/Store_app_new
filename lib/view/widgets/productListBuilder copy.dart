@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:store_app/models/poduct_model.dart';
 import 'package:store_app/models/product/product.dart';
 import 'package:store_app/view/widgets/productListView.dart';
 
@@ -35,7 +36,7 @@ class _ProductListBuilderState extends State<ProductListBuilder2> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<products>?>(
+    return FutureBuilder<List<ProductData>?>(
       future: widget.future,
       builder: (context, snapshot) {
         if (snapshot.hasData) {

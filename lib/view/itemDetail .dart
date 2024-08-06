@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:store_app/core/viewmodel/cart_viewmodel.dart';
+import 'package:store_app/core/viewmodel/userController.dart';
 import 'package:store_app/models/cart_model.dart';
+import 'package:store_app/models/poduct_model.dart';
 import 'package:store_app/models/product/product.dart';
 
-
 class ItemDetail3 extends StatelessWidget {
-  products data2;
+  ProductData data2;
   ItemDetail3({
     super.key,
     required this.data2,
   });
-
+  userController cc = Get.put(userController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,14 +29,30 @@ class ItemDetail3 extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text(
-                '\$ ' "${data2.price}",
-                style: const TextStyle(
-                  color: Colors.orange,
-                  fontSize: 19,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              (data2.repoInfo.price != null)
+                  ? (data2.repoInfo.price! > 75)
+                      ? Text(
+                          "${data2.repoInfo.price} s.p",
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 19,
+                            color: Colors.orange,
+                          ),
+                        )
+                      : const Text(
+                          "Product Unavailable",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                              fontSize: 13),
+                        )
+                  : const Text(
+                      "Product Unavailable",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red,
+                          fontSize: 13),
+                    ),
               const SizedBox(
                 width: 20,
               ),
@@ -46,8 +63,8 @@ class ItemDetail3 extends StatelessWidget {
                       onTap: () {
                         contrlar.addProduct(Cart(
                           Productid: data2.id,
-                          price: data2.price,
-                          image: data2.image,
+                          price: data2.repoInfo.price,
+                          image: data2.imageCovered,
                           quantity: 1,
                           title: data2.title,
                         ));
@@ -92,11 +109,12 @@ class ItemDetail3 extends StatelessWidget {
                 background: InstaImageViewer(
                   child: Image(
                     image:
-                        Image.network(fit: BoxFit.fitWidth, data2.image!).image,
+                        Image.network(fit: BoxFit.fitWidth, data2.imageCovered)
+                            .image,
                   ),
                 ),
               ),
-              expandedHeight: 400,
+              expandedHeight: 350,
               backgroundColor: Colors.white,
               bottom: PreferredSize(
                 preferredSize: const Size.fromHeight(10),
@@ -130,16 +148,27 @@ class ItemDetail3 extends StatelessWidget {
                 ),
               ),
               automaticallyImplyLeading: false,
-              actions: const [
+              actions: [
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  child: CircleAvatar(
-                    backgroundColor: Color.fromRGBO(250, 250, 250, 0.6),
-                    radius: 18,
-                    child: Icon(
-                      Icons.favorite_border,
-                      color: Colors.red,
-                      size: 25,
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: InkWell(
+                    onTap: () {
+                      if (!cc.isInWishList(data2.id)) {
+                        cc.add(data2.id);
+                      } else {
+                        cc.del(data2.id);
+                      }
+                    },
+                    child: CircleAvatar(
+                      backgroundColor: const Color.fromRGBO(250, 250, 250, 0.6),
+                      radius: 18,
+                      child: Obx(() => Icon(
+                            cc.isInWishList(data2.id)
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: Colors.red,
+                            size: 25,
+                          )),
                     ),
                   ),
                 ),
@@ -171,7 +200,7 @@ class ItemDetail3 extends StatelessWidget {
                     children: [
                       const SizedBox(height: 20),
                       Text(
-                        data2.title!,
+                        data2.title,
                         style: const TextStyle(
                           fontSize: 24,
                           color: Colors.black,
@@ -197,54 +226,8 @@ class ItemDetail3 extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 20),
-                      const SizedBox(height: 25),
                       const Text(
-                        'Select Size',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 15),
-                      SizedBox(
-                        height: 35,
-                        child: ListView.builder(
-                          itemCount: 12,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.only(right: 11),
-                              child: GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  width: 35,
-                                  height: 35,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      width: 1.2,
-                                      color: Colors.grey,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: const Text(
-                                    " 1'",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      const Text(
-                        'Explain',
+                        'Description',
                         style: TextStyle(
                           fontSize: 18,
                           color: Colors.black,
@@ -255,7 +238,7 @@ class ItemDetail3 extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 20),
                         child: Text(
-                          data2.description!,
+                          data2.description,
                           style: TextStyle(
                             fontSize: 16,
                             color: Colors.grey.shade600,

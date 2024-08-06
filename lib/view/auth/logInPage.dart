@@ -21,22 +21,22 @@ class LogIn extends StatelessWidget {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(9),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(
-              height: 40,
+              height: 44,
             ),
             const Text(
               "Log In",
               textAlign: TextAlign.start,
               style: TextStyle(
-                fontSize: 37,
+                fontSize: 44,
                 fontFamily: "Metropolis",
                 fontWeight: FontWeight.w900,
               ),
             ),
             const SizedBox(
-              height: 50,
+              height: 44,
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 20),
@@ -50,6 +50,7 @@ class LogIn extends StatelessWidget {
                       child: Column(
                         children: [
                           CustomTextField(
+                            prefixIcon: const Icon(Icons.email),
                             initial: cc.getemail(),
                             text: "Email",
                             onSave: (val) {
@@ -63,17 +64,26 @@ class LogIn extends StatelessWidget {
                           const SizedBox(
                             height: 7,
                           ),
-                          CustomTextField(
-                            initial: cc.getPassword(),
-                            onSave: (val) {
-                              authControlar.password = val;
-                            },
-                            validate: (e) {
-                              return authControlar.validatePassword(e);
-                            },
-                            text: "Password",
-                            type: TextInputType.visiblePassword,
-                          ),
+                          Obx(() => CustomTextField(
+                                suffixIcon: GestureDetector(
+                                  onTap: () => authControlar.toggle(),
+                                  child: Icon(authControlar.obscureText.value
+                                      ? Icons.visibility_off
+                                      : Icons.visibility),
+                                ),
+                                prefixIcon: const Icon(Icons.password_outlined),
+                                initial: cc.getPassword(),
+                                onSave: (val) {
+                                  authControlar.password = val;
+                                },
+                                validate: (e) {
+                                  return authControlar.validatePassword(e);
+                                },
+                                text: "Password",
+                                type: authControlar.obscureText.value
+                                    ? TextInputType.visiblePassword
+                                    : null,
+                              )),
                         ],
                       ),
                     ),
@@ -81,43 +91,23 @@ class LogIn extends StatelessWidget {
                   const SizedBox(
                     height: 18,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Get.offAll(SignUP());
-                        },
-                        child: const Text(
-                          "Don't have an account? ➡",
-                          textAlign: TextAlign.end,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.red,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                   const SizedBox(
                     height: 15,
                   ),
                   GetX<AuthController>(builder: (controlar) {
                     return CustomButton(
                         chaild: controlar.isLoading.value
-                            ? CircularProgressIndicator(
+                            ? const CircularProgressIndicator(
                                 color: Colors.white,
                               )
-                            : buttonText(label: "LogIn"),
+                            : const buttonText(label: "LogIn"),
                         onPressed: () {
                           formkey.currentState!.save();
                           if (formkey.currentState!.validate()) {
                             controlar.isLoading.value = true;
                             cc.saveUser(
                                 authControlar.email, authControlar.password);
-                       authControlar.login();
-                   
-
+                            authControlar.login();
                           } else {
                             Get.snackbar(
                                 "error", " error in username or password");
@@ -128,7 +118,7 @@ class LogIn extends StatelessWidget {
                     height: 100,
                   ),
                   const Text(
-                    "Or log in with social account",
+                    "Don't have an account? ",
                     textAlign: TextAlign.end,
                     style: TextStyle(
                       fontSize: 14,
@@ -136,16 +126,21 @@ class LogIn extends StatelessWidget {
                       fontWeight: FontWeight.w200,
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        onPressed: () {},
-                        icon: Brand(Brands.google),
+                  InkWell(
+                    onTap: () {
+                      Get.offAll(SignUP());
+                    },
+                    child: const Text(
+                      "Sign Up",
+                      textAlign: TextAlign.end,
+                      style: TextStyle(
+                        fontSize: 14,
+                        decoration: TextDecoration.underline,
+                        color: Colors.red,
+                        fontFamily: "Metropolis",
+                        fontWeight: FontWeight.w700,
                       ),
-                      IconButton(
-                          onPressed: () {}, icon: Brand(Brands.facebook)),
-                    ],
+                    ),
                   )
                 ],
               ),

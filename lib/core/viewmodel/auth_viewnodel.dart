@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:store_app/core/services/logInService.dart';
@@ -11,11 +13,17 @@ class AuthController extends GetxController {
   late AuthenticationManager _authManager;
   userController cc = Get.put(userController());
   RxBool isLoading = false.obs;
-  String? email, password, name;
+  var obscureText = true.obs;
+
+  String? email, password, name, pp;
   @override
   void onInit() {
     super.onInit();
     _authManager = Get.find();
+  }
+
+  void toggle() {
+    obscureText.value = !obscureText.value;
   }
 
   validateEmail(String? Email) {
@@ -27,8 +35,16 @@ class AuthController extends GetxController {
   }
 
   validatePassword(String? pwd) {
-    if (GetUtils.isLengthLessThan(pwd ?? "", 2)) {
+    if (GetUtils.isLengthLessThan(pwd ?? "", 5)) {
       return "password must be 8 char ";
+    } else {
+      return null;
+    }
+  }
+
+  confirmPassword(String? pwd) {
+    if (pwd != pp) {
+      return "Passwords must be same";
     } else {
       return null;
     }
@@ -50,7 +66,9 @@ class AuthController extends GetxController {
           result.statusCode.toString(), result.statusMessage.toString());
     }
   }
- login() async {
+
+  login() async {
+
     var result = await LogInServices(
       dio: Dio(),
     ).logIn(email: email.toString(), password: password.toString());
@@ -60,13 +78,12 @@ class AuthController extends GetxController {
       cc.email = result.email;
       cc.id = result.id;
       cc.name = result.name;
-                                Get.offAll(LandingPage(),
-                               );
-                               
-
+      cc.wishlist.value = result.wishlist!;
+      Get.offAll(
+        LandingPage(),
+      );
     } else {
       Get.snackbar(".", "errror");
-
     }
   }
 }

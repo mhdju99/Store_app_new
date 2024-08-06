@@ -5,8 +5,10 @@ import 'package:store_app/core/viewmodel/landing_viewmodel.dart';
 import 'package:store_app/core/viewmodel/userController.dart';
 import 'package:store_app/view/home_page.dart';
 import 'package:store_app/view/onBorder.dart';
+import 'package:store_app/view/orderPAge.dart';
 import 'package:store_app/view/widgets/CustomButton.dart';
 import 'package:store_app/view/widgets/buttonText.dart';
+import 'package:store_app/view/wishlistPge.dart';
 
 class UserPage extends StatelessWidget {
   UserPage({super.key});
@@ -21,7 +23,7 @@ class UserPage extends StatelessWidget {
       child: ListView(
         children: [
           const Text(
-            "My profail",
+            "My profile",
             textAlign: TextAlign.start,
             style: TextStyle(
               fontSize: 37,
@@ -29,88 +31,142 @@ class UserPage extends StatelessWidget {
               fontWeight: FontWeight.w700,
             ),
           ),
-          ListTile(
-            leading: const CircleAvatar(
-              backgroundImage: NetworkImage(
-                  "https://www.google.com/url?sa=i&url=https%3A%2F%2Funsplash.com%2Fs%2Fphotos%2Fprofile&psig=AOvVaw2gXPwJdvgEfLYFq3TDZlEe&ust=1717634093324000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCLihk-Kbw4YDFQAAAAAdAAAAABAE"),
-            ),
-            title: Text(
-              uu.name ?? ".",
-              style: const TextStyle(
-                fontFamily: "Metropolis",
-                fontWeight: FontWeight.w700,
+          const SizedBox(
+            height: 20,
+          ),
+          Card(
+            color: Colors.grey[200],
+            child: SizedBox(
+              height: 90,
+              child: ListTile(
+                leading: const CircleAvatar(
+                    backgroundImage: AssetImage("assets/images/person.png")),
+                title: Text(
+                  uu.name ?? ".",
+                  style: const TextStyle(
+                    fontFamily: "Metropolis",
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                subtitle: Text(
+                  uu.email ?? ".",
+                ),
               ),
-            ),
-            subtitle: Text(
-              uu.email ?? ".",
             ),
           ),
           const SizedBox(
             height: 20,
           ),
-          const Card(
-            elevation: 3,
-            color: Color.fromARGB(255, 196, 202, 220),
-            child: ListTile(
-              title: Text(
-                "Shiping address",
-                style: TextStyle(
-                  fontFamily: "Metropolis",
-                  fontWeight: FontWeight.w700,
-                ),
+          InkWell(
+            onTap: () {
+              Get.to(orderPge());
+            },
+            child: Card(
+              color: Colors.grey[200],
+              child:  Column(
+                children: [
+                  SizedBox(
+                    height: 40,
+                    child: ListTile(
+                      leading: Icon(Icons.task_alt_sharp),
+                      title: Text(
+                        "My Order",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: "Metropolis",
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      trailing: Icon(Icons.arrow_right),
+                    ),
+                  ),
+                  Divider(),
+                  SizedBox(
+                    height: 40,
+                    child: ListTile(
+                      leading: Icon(Icons.pin_drop),
+                      title: Text(
+                        "My Address",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: "Metropolis",
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      trailing: Icon(Icons.arrow_right),
+                    ),
+                  ),
+                  Divider(),
+                  InkWell(
+                    onTap: (){
+                                    Get.to(wishlist());
+
+                    },
+                    child: SizedBox(
+                      height: 50,
+                      child: ListTile(
+                        leading: Icon(Icons.favorite),
+                        title: Text(
+                          "wishlist",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: "Metropolis",
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        trailing: Icon(Icons.arrow_right),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              trailing: Icon(Icons.arrow_right),
             ),
           ),
-          const Card(
-            color: Color.fromARGB(255, 196, 202, 220),
-            child: ListTile(
-              title: Text(
-                "Promo code",
-                style: TextStyle(
-                  fontFamily: "Metropolis",
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              trailing: Icon(Icons.arrow_right),
-            ),
-          ),
-          const Card(
-            color: Color.fromARGB(255, 196, 202, 220),
-            child: ListTile(
-              title: Text(
-                "Promo code",
-                style: TextStyle(
-                  fontFamily: "Metropolis",
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              trailing: Icon(Icons.arrow_right),
-            ),
-          ),
-          const Card(
-            color: Color.fromARGB(255, 196, 202, 220),
-            child: ListTile(
-              title: Text(
-                "Promo code",
-                style: TextStyle(
-                  fontFamily: "Metropolis",
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              trailing: Icon(Icons.arrow_right),
-            ),
+          const SizedBox(
+            height: 60,
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: CustomButton(
-              chaild: const buttonText(label: "logout"),
-              onPressed: () {
-                // cc.logOut();
-                ll.tabIndex = 0;
-                ll.currentTab = const HomePage();
-                Get.offAll(() => const OnBoard());
-              },
+            padding: const EdgeInsets.all(30.0),
+            child: Container(
+              width: 343,
+              height: 48,
+              margin: const EdgeInsets.symmetric(horizontal: 1),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(25),
+                  color: Colors.red,
+                  boxShadow: const [
+                    BoxShadow(
+                        color: Color.fromRGBO(211, 38, 38, 0.25),
+                        spreadRadius: 1,
+                        blurRadius: 9,
+                        blurStyle: BlurStyle.solid)
+                  ],
+                  border: Border.all(color: Colors.red)),
+              child: MaterialButton(
+                disabledColor: Colors.amber,
+
+                // padding:
+                //     const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                onPressed: () {
+                  ll.tabIndex = 0;
+                  ll.currentTab = const HomePage();
+                  Get.offAll(() => const OnBoard());
+                },
+
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Log Out  ",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    Icon(
+                      Icons.exit_to_app,
+                      color: Colors.white,
+                    )
+                  ],
+                ),
+              ),
             ),
           ),
         ],

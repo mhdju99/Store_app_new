@@ -6,17 +6,40 @@ import 'package:store_app/view/UserPage.dart';
 
 class LandingPageController extends GetxController {
   var tabIndex = 0;
-  Widget currentTab =  HomePage();
+    DateTime? _lastPressed;
+
+  Widget currentTab = HomePage();
 
   void changTabIndex(int index) {
     tabIndex = index;
     update();
   }
 
+ Future<bool> onWillPop() async {
+    if (tabIndex != 0) {
+      tabIndex = 0;
+      update();
+      changPage(0);
+
+      return false; // عدم الخروج من التطبيق
+    }
+
+    DateTime now = DateTime.now();
+    if (_lastPressed == null ||
+        now.difference(_lastPressed!) > Duration(seconds: 2)) {
+      _lastPressed = now;
+       Get.rawSnackbar(message: "double click to exit'", duration: Duration(seconds: 2));
+      ;
+      return false; // منع الخروج
+    }
+    return true; // الخروج من التطبيق
+  }
+
+
   void changPage(int index) {
     switch (index) {
       case 0:
-        currentTab =  HomePage();
+        currentTab = HomePage();
         update();
 
         break;

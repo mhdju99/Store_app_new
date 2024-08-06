@@ -26,6 +26,7 @@ class LogInServices {
         user = userModel(
             name: item["name"],
             token: token,
+            wishlist: item["wishlist"],
             email: item["email"],
             id: item["_id"]);
         print("ssssssssssssssssss");

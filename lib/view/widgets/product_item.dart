@@ -1,13 +1,17 @@
-
+import 'package:store_app/core/viewmodel/homePage_viewmodel.dart';
+import 'package:store_app/models/poduct_model.dart';
 import 'package:store_app/models/product/product.dart';
 
 import 'package:store_app/view/itemDetail%20.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:store_app/view/widgets/customText.dart';
 
 class product_card extends StatelessWidget {
-  products product;
+  HomeControllar cc = Get.put(HomeControllar());
+
+  ProductData product;
 
   product_card({
     super.key,
@@ -21,65 +25,68 @@ class product_card extends StatelessWidget {
         Get.to(ItemDetail3(data2: product));
       },
       child: Card(
-        elevation: 5,
+        elevation: 7,
         child: Column(
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Stack(
-              children: [
-                Container(
-                  color: Colors.grey[300],
-                  alignment: Alignment.center,
+            Expanded(
+              child: Container(
+                  alignment: Alignment.topCenter,
                   child: Image.network(
-                    product.image!,
+                    product.imageCovered,
                     fit: BoxFit.fitWidth,
                     height: 170,
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.topRight,
-                  child: IconButton(
-                    alignment: Alignment.topRight,
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.favorite,
-                      color: Colors.red.shade600,
-                      size: 30,
-                    ),
-                  ),
-                )
-              ],
+                    // cc.Barnds[index].Image!,
+                  )),
             ),
-            Container(
-              padding: const EdgeInsets.only(left: 10),
+            const SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 11),
+              child: CustomText(
+                text: cc.FindBrand(product.brand!).toString(),
+                fontSize: 14,
+                coler: Colors.grey,
+                wight: FontWeight.bold,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 11),
+              child: CustomText(
+                // text: cc.Barnds[index].BrandName!,
+                text: product.title,
+                fontSize: 18,
+                wight: FontWeight.bold,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 11, bottom: 10),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        product.title!.substring(1, 10),
-                      ),
-                      Text(product.category!,
+                  (product.repoInfo.price != null)
+                      ?   ( product.repoInfo!.price! >75 )?Text(
+                          "${product.repoInfo.price} s.p",
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
-                          )),
-                      Text(
-                        product.price!.toString(),
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.orange),
-                      ),
-                    ],
-                  ),
-                  const Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      SizedBox(
-                        height: 30,
-                      ),
-                    ],
-                  )
+                            color: Colors.orange,
+                          ),
+                        ): Text(
+                              "Product Unavailable",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.red,
+                                  fontSize: 12),
+                            )
+                      : const Text(
+                          "Product Unavailable",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                              fontSize: 12),
+                        )
                 ],
               ),
             )

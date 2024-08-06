@@ -1,14 +1,15 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 class Cart {
-  int? Productid;
+  String? Productid;
   String? title;
-  double? price;
+  int? price;
   String? image;
   int? quantity;
 
   Cart({
     this.Productid,
     this.title,
-    this.price,
+     this.price,
     this.image,
     this.quantity,
   });
@@ -19,9 +20,9 @@ class Cart {
   }
 
   factory Cart.fromJson(Map<String, dynamic> json) => Cart(
-        Productid: json['Productid'] as int?,
+        Productid: json['Productid'] as String?,
         title: json['title'] as String?,
-        price: (json['price'] as num?)?.toDouble(),
+        price: (json['price'] as num?)?.toInt(),
         quantity: json['quantity'] as int?,
         image: json['image'] as String?,
       );
