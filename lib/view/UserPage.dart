@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:store_app/core/viewmodel/AuthenticationManager%20.dart';
 import 'package:store_app/core/viewmodel/landing_viewmodel.dart';
 import 'package:store_app/core/viewmodel/userController.dart';
+import 'package:store_app/view/AddressPage.dart';
 import 'package:store_app/view/home_page.dart';
 import 'package:store_app/view/onBorder.dart';
 import 'package:store_app/view/orderPAge.dart';
@@ -57,31 +58,29 @@ class UserPage extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          InkWell(
-            onTap: () {
-              Get.to(orderPge());
-            },
-            child: Card(
-              color: Colors.grey[200],
-              child:  Column(
-                children: [
-                  SizedBox(
-                    height: 40,
-                    child: ListTile(
-                      leading: Icon(Icons.task_alt_sharp),
-                      title: Text(
-                        "My Order",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: "Metropolis",
-                          fontWeight: FontWeight.w700,
-                        ),
+          Card(
+            color: Colors.grey[200],
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 40,
+                  child: ListTile(
+                    leading: Icon(Icons.task_alt_sharp),
+                    title: Text(
+                      "My Order",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: "Metropolis",
+                        fontWeight: FontWeight.w700,
                       ),
-                      trailing: Icon(Icons.arrow_right),
                     ),
+                    trailing: Icon(Icons.arrow_right),
                   ),
-                  Divider(),
-                  SizedBox(
+                ),
+                const Divider(),
+                InkWell(
+                  onTap: () => Get.to(AddressPage()),
+                  child: const SizedBox(
                     height: 40,
                     child: ListTile(
                       leading: Icon(Icons.pin_drop),
@@ -96,30 +95,29 @@ class UserPage extends StatelessWidget {
                       trailing: Icon(Icons.arrow_right),
                     ),
                   ),
-                  Divider(),
-                  InkWell(
-                    onTap: (){
-                                    Get.to(wishlist());
-
-                    },
-                    child: SizedBox(
-                      height: 50,
-                      child: ListTile(
-                        leading: Icon(Icons.favorite),
-                        title: Text(
-                          "wishlist",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontFamily: "Metropolis",
-                            fontWeight: FontWeight.w700,
-                          ),
+                ),
+                const Divider(),
+                InkWell(
+                  onTap: () {
+                    Get.to(wishlist());
+                  },
+                  child: const SizedBox(
+                    height: 50,
+                    child: ListTile(
+                      leading: Icon(Icons.favorite),
+                      title: Text(
+                        "wishlist",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: "Metropolis",
+                          fontWeight: FontWeight.w700,
                         ),
-                        trailing: Icon(Icons.arrow_right),
                       ),
+                      trailing: Icon(Icons.arrow_right),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
           const SizedBox(

@@ -13,14 +13,22 @@ class wishlist extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text(
-            "My wishlist",
-            textAlign: TextAlign.start,
-            style: TextStyle(
-              fontSize: 20,
-              fontFamily: "Metropolis",
-              fontWeight: FontWeight.w700,
-            ),
+          title: const Row(
+            children: [
+              Text(
+                "My wishlist",
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: "Metropolis",
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              SizedBox(
+                width: 20,
+              ),
+              Icon(Icons.favorite),
+            ],
           ),
         ),
         body: Container(

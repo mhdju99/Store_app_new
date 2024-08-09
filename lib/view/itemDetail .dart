@@ -61,14 +61,9 @@ class ItemDetail3 extends StatelessWidget {
                   builder: (contrlar) {
                     return InkWell(
                       onTap: () {
-                        contrlar.addProduct(Cart(
-                          Productid: data2.id,
-                          price: data2.repoInfo.price,
-                          image: data2.imageCovered,
-                          quantity: 1,
-                          title: data2.title,
-                        ));
-                        Get.snackbar("title", "sucsess");
+                        contrlar.add(
+                          data2.id
+                        );
                       },
                       child: Container(
                         width: 190,

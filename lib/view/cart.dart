@@ -2,17 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:store_app/core/viewmodel/cart_viewmodel.dart';
+import 'package:store_app/core/viewmodel/homePage_viewmodel.dart';
 import 'package:store_app/models/product/product.dart';
+import 'package:store_app/view/itemDetail%20.dart';
+import 'package:store_app/view/transaction.dart';
 
 class Cart extends StatelessWidget {
   Cart({super.key});
 
-  products data = products(
-    category: "dcv",
-    description: "SAddddddddddddddddddddddd",
-    price: 22,
-    title: "SAdasd",
-  );
+  CartController cc = Get.put(CartController());
+  HomeControllar pp = Get.put(HomeControllar());
 
   @override
   Widget build(BuildContext context) {
@@ -88,10 +87,10 @@ class Cart extends StatelessWidget {
         //     ],
         //   ),),
 
-        body: GetBuilder<CartController>(
-            init: CartController(),
-            builder: (cc) {
-              return cc.isempity
+        body: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            child: Obx(() {
+              return cc.product.isEmpty
                   ? Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -119,26 +118,33 @@ class Cart extends StatelessWidget {
                           Expanded(
                               child: Container(
                             child: ListView.builder(
-                                itemCount: cc.product!.length,
+                                itemCount: cc.product.length,
                                 itemBuilder: (c, index) {
-                                  final items = cc.product!;
-                                  final item = cc.product![index];
-                                  print(items);
+                                  final item = cc.product[index];
+
+                                  var product =
+                                      pp.Findproduct(item.product.toString());
+                                  // print(items);
 
                                   return Dismissible(
-                                      key: Key(cc.product!.toString()),
-                                      direction: DismissDirection.endToStart,
+                                      background: slideRightBackground(),
+                                      secondaryBackground:
+                                          slideLeftBackground(),
+                                      key: Key(index.toString()),
+                                      // direction: DismissDirection.endToStart,
+
                                       onDismissed: (dirction) {
-                                        items.removeAt(index);
-                                        print(item.Productid!);
+                                        cc.del(item.id!);
+                                        // items.removeAt(index);
+                                        // print(item.Productid!);
                                         // cc.dellProduct(item.Productid.toString());
                                       },
                                       child: Card(
                                         color: Colors.grey[200],
-                                        elevation: 5,
+                                        elevation: 2,
                                         child: Container(
                                           padding: const EdgeInsets.symmetric(
-                                              horizontal: 20, vertical: 5),
+                                              horizontal: 10, vertical: 5),
                                           child: Row(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
@@ -146,11 +152,10 @@ class Cart extends StatelessWidget {
                                               SizedBox(
                                                 width: 60,
                                                 child: Image.network(
-                                                  item.image.toString(),
-                                                ),
+                                                    product.imageCovered),
                                               ),
                                               const SizedBox(
-                                                width: 30,
+                                                width: 20,
                                               ),
                                               Column(
                                                 mainAxisAlignment:
@@ -158,20 +163,24 @@ class Cart extends StatelessWidget {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  Text(
-                                                    item.title.toString(),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: const TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 14,
-                                                      fontFamily: "Metropolis",
-                                                      fontWeight:
-                                                          FontWeight.w300,
+                                                  InkWell(
+                                                    onTap: () {
+                                                      Get.to(ItemDetail3(
+                                                          data2: product));
+                                                    },
+                                                    child: Text(
+                                                      product.title.toString(),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: const TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 14,
+                                                        fontFamily:
+                                                            "Metropolis",
+                                                        fontWeight:
+                                                            FontWeight.w300,
+                                                      ),
                                                     ),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 5,
                                                   ),
                                                   Text(
                                                     item.price.toString(),
@@ -180,11 +189,11 @@ class Cart extends StatelessWidget {
                                                       fontSize: 16,
                                                       fontFamily: "Metropolis",
                                                       fontWeight:
-                                                          FontWeight.w300,
+                                                          FontWeight.w700,
                                                     ),
                                                   ),
                                                   const SizedBox(
-                                                    height: 15,
+                                                    height: 5,
                                                   ),
                                                   Row(
                                                     mainAxisAlignment:
@@ -213,20 +222,28 @@ class Cart extends StatelessWidget {
                                                           children: [
                                                             GestureDetector(
                                                                 onTap: () {
-                                                                  cc.incrise(
-                                                                      index);
+                                                                  cc.incrise(item
+                                                                      .id
+                                                                      .toString());
+                                                                  // cc.incrise(
+                                                                  //     index);
                                                                 },
                                                                 child: const Icon(
                                                                     Icons.add)),
                                                             const SizedBox(
                                                               width: 15,
                                                             ),
-                                                            Text(item.quantity
-                                                                .toString()),
+                                                            GetBuilder<
+                                                                    CartController>(
+                                                                builder: (cc) {
+                                                              return Text(
+                                                                  "${cc.product[index].quantity.toString()}");
+                                                            }),
                                                             const SizedBox(
                                                               width: 15,
                                                             ),
                                                             Container(
+                                                                // /${product.repoInfo.totalQuantity}
                                                                 padding:
                                                                     const EdgeInsets
                                                                         .only(
@@ -235,8 +252,9 @@ class Cart extends StatelessWidget {
                                                                 child:
                                                                     GestureDetector(
                                                                   onTap: () {
-                                                                    cc.decrise(
-                                                                        index);
+                                                                    cc.decrise(item
+                                                                        .id
+                                                                        .toString());
                                                                   },
                                                                   child: const Icon(
                                                                       Icons
@@ -248,7 +266,10 @@ class Cart extends StatelessWidget {
                                                     ],
                                                   )
                                                 ],
-                                              )
+                                              ),
+                                              const SizedBox(
+                                                width: 50,
+                                              ),
                                             ],
                                           ),
                                         ),
@@ -285,7 +306,7 @@ class Cart extends StatelessWidget {
                               ),
                               InkWell(
                                 onTap: () {
-                                  print("cc.product");
+                                  Get.to(transactionPage());
                                 },
                                 child: Container(
                                   width: 170,
@@ -319,7 +340,65 @@ class Cart extends StatelessWidget {
                         ],
                       ),
                     );
-            }));
+            })));
+  }
+
+  Widget slideLeftBackground() {
+    return Container(
+      color: Colors.red,
+      child: const Align(
+        alignment: Alignment.centerRight,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            Icon(
+              Icons.delete,
+              color: Colors.white,
+            ),
+            Text(
+              " Delete",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.right,
+            ),
+            SizedBox(
+              width: 20,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget slideRightBackground() {
+    return Container(
+      color: Colors.green,
+      child: const Align(
+        alignment: Alignment.centerLeft,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(
+              width: 20,
+            ),
+            Icon(
+              Icons.edit,
+              color: Colors.white,
+            ),
+            Text(
+              " Edit",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.left,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 

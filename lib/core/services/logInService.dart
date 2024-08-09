@@ -12,11 +12,13 @@ class LogInServices {
     required String email,
     required String password,
   }) async {
+    print("lllllll");
     Response? response =
         await Api().post(endpoint: EndPoints.login_endpoint, body: {
       "email": email,
       "password": password,
     });
+    print(response);
     userModel? user;
     if (response != null) {
       if (response.statusCode == 200 || response.statusCode == 201) {
