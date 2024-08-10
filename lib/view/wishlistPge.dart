@@ -60,7 +60,7 @@ class wishlist extends StatelessWidget {
                                                 product.imageCovered),
                                           ),
                                           subtitle: Text(
-                                            "${product.repoInfo.price!.toString()} s.p",
+                                            "\$${product.repoInfo.price!.toString()} ",
                                             style: const TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.orange),

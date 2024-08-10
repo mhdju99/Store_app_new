@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:store_app/core/viewmodel/AddressController.dart';
 import 'package:store_app/core/viewmodel/cart_viewmodel.dart';
 import 'package:store_app/core/viewmodel/homePage_viewmodel.dart';
 import 'package:store_app/models/product/product.dart';
@@ -183,7 +184,7 @@ class Cart extends StatelessWidget {
                                                     ),
                                                   ),
                                                   Text(
-                                                    item.price.toString(),
+                                                    "\$${item.price.toString()}",
                                                     style: const TextStyle(
                                                       color: Colors.orange,
                                                       fontSize: 16,
@@ -222,9 +223,12 @@ class Cart extends StatelessWidget {
                                                           children: [
                                                             GestureDetector(
                                                                 onTap: () {
-                                                                  cc.incrise(item
-                                                                      .id
-                                                                      .toString());
+                                                                  cc.incrise(
+                                                                      item.id
+                                                                          .toString(),
+                                                                      product
+                                                                          .repoInfo
+                                                                          .currantQuantity);
                                                                   // cc.incrise(
                                                                   //     index);
                                                                 },
@@ -236,8 +240,11 @@ class Cart extends StatelessWidget {
                                                             GetBuilder<
                                                                     CartController>(
                                                                 builder: (cc) {
-                                                              return Text(
-                                                                  "${cc.product[index].quantity.toString()}");
+                                                              return Text(cc
+                                                                  .product[
+                                                                      index]
+                                                                  .quantity
+                                                                  .toString());
                                                             }),
                                                             const SizedBox(
                                                               width: 15,
@@ -293,7 +300,7 @@ class Cart extends StatelessWidget {
                                     ),
                                     GetBuilder<CartController>(builder: (cc) {
                                       return Text(
-                                        cc.price.round().toString(),
+                                        "\$${cc.price.round().toString()}",
                                         style: const TextStyle(
                                           color: Colors.orange,
                                           fontSize: 19,
@@ -306,7 +313,14 @@ class Cart extends StatelessWidget {
                               ),
                               InkWell(
                                 onTap: () {
-                                  Get.to(transactionPage());
+                                  AddressController bb =
+                                      Get.put(AddressController());
+                                  if (bb.Barnds.isNotEmpty) {
+                                    Get.to(transactionPage());
+                                  } else {
+                                    Get.snackbar(
+                                        "warning", " add Delivery address  ");
+                                  }
                                 },
                                 child: Container(
                                   width: 170,
@@ -374,7 +388,7 @@ class Cart extends StatelessWidget {
 
   Widget slideRightBackground() {
     return Container(
-      color: Colors.green,
+      color: Colors.white,
       child: const Align(
         alignment: Alignment.centerLeft,
         child: Row(
@@ -388,7 +402,7 @@ class Cart extends StatelessWidget {
               color: Colors.white,
             ),
             Text(
-              " Edit",
+              "",
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,

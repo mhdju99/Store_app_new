@@ -4,6 +4,7 @@ import 'package:store_app/core/viewmodel/AuthenticationManager%20.dart';
 import 'package:store_app/core/viewmodel/landing_viewmodel.dart';
 import 'package:store_app/core/viewmodel/userController.dart';
 import 'package:store_app/view/AddressPage.dart';
+import 'package:store_app/view/LandingPage.dart';
 import 'package:store_app/view/home_page.dart';
 import 'package:store_app/view/onBorder.dart';
 import 'package:store_app/view/orderPAge.dart';
@@ -28,14 +29,25 @@ class succssesPage extends StatelessWidget {
             width: 300,
             child: Image.asset("assets/images/done.png"),
           ),
-          const Text(
-            "your order has been placed",
-            style: TextStyle(
-              color: Colors.black,
-              fontFamily: "Metropolis",
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
-            ),
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                "your order has been placed",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontFamily: "Metropolis",
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              Icon(
+                Icons.done,
+                size: 30,
+                color: Colors.green,
+              )
+            ],
           ),
           const SizedBox(
             height: 20,
@@ -54,7 +66,9 @@ class succssesPage extends StatelessWidget {
               // padding:
               //     const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
               onPressed: () {
-                Get.offAll(() => const HomePage());
+                  ll.tabIndex = 0;
+                ll.currentTab = const HomePage();
+                Get.offAll(() =>  LandingPage());
               },
 
               child: const Row(

@@ -27,9 +27,9 @@ class HomeControllar extends GetxController {
       var data = await ProductService().getProduct();
       if (data != null) {
         print(data);
-        _productLIst.value = data;
-        // .where((element) => element.repoInfo.price !=null)
-        // .toList();
+        _productLIst.value = data
+        .where((element) => element.repoInfo.price !=null)
+        .toList();
       }
     } finally {
       loading(false);

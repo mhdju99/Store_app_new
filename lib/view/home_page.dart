@@ -51,26 +51,28 @@ class _pageOneState extends State<HomePage> {
                     onTap: () {
                       showSearch(context: context, delegate: search(cc: cc));
                     },
-                    child: TextFormField(
-                      enabled: F,
-                      decoration: InputDecoration(
-                        hintText: "Search",
-                        prefixIcon: const Icon(Icons.search),
-                        border: InputBorder.none,
-                        filled: true,
-                        fillColor: Colors.grey[300],
+                    child: Container(
+                      height: 60,
+                      margin: const EdgeInsets.all(0),
+                      padding: const EdgeInsets.all(7.0),
+                      child: TextFormField(
+                        enabled: F,
+                        decoration: InputDecoration(
+                          hintText: "Search",
+                          prefixIcon: const Icon(Icons.search),
+                          border: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                width: 0,
+                                style: BorderStyle.none,
+                              ),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          filled: true,
+                          fillColor: Colors.grey[300],
+                        ),
                       ),
                     ),
                   )),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 5),
-                    child: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.menu,
-                          size: 30,
-                        )),
-                  )
                 ],
               ),
             ),
@@ -154,6 +156,7 @@ class search extends SearchDelegate {
   search({
     required this.cc,
   });
+
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
@@ -179,7 +182,12 @@ class search extends SearchDelegate {
     if (query != "") {
       filter = cc.product!
           .where((element) =>
-              element.title.toLowerCase().contains(query.toLowerCase()))
+              element.title.toLowerCase().startsWith(query.toLowerCase()) ||
+              element.category.name
+                      .toLowerCase()
+                      .contains(query.toLowerCase()) &&
+                  query.length > 1 &&
+                  element.repoInfo.price != null)
           .toList();
       return buildResuilt(filter: filter);
     } else {
@@ -215,7 +223,12 @@ class search extends SearchDelegate {
     if (query != "") {
       filter = cc.product!
           .where((element) =>
-              element.title.toLowerCase().contains(query.toLowerCase()))
+              element.title.toLowerCase().startsWith(query.toLowerCase()) ||
+              element.category.name
+                      .toLowerCase()
+                      .contains(query.toLowerCase()) &&
+                  query.length > 1 &&
+                  element.repoInfo.price != null)
           .toList();
       return ListView.builder(
           itemCount: filter.length,
@@ -242,13 +255,16 @@ class search extends SearchDelegate {
       return Center(
         child: Column(
           children: [
+            const SizedBox(
+              height: 40,
+            ),
             SizedBox(
               height: 200,
               width: 200,
               child: Image.asset("assets/images/search-product.png"),
             ),
             const Text(
-              "Serrch your product",
+              "Search  product",
               style: TextStyle(
                 color: Colors.grey,
                 fontFamily: "Metropolis",

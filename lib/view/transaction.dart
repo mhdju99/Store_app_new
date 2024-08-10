@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:store_app/core/viewmodel/AddressController.dart';
 import 'package:store_app/core/viewmodel/cart_viewmodel.dart';
 import 'package:store_app/core/viewmodel/homePage_viewmodel.dart';
+import 'package:store_app/view/succssesPage%20copy.dart';
 import 'package:store_app/view/succssesPage.dart';
 
 class transactionPage extends StatelessWidget {
@@ -160,7 +161,7 @@ class transactionPage extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "${cc.totalprice.toString()} s.p",
+                      "\$${cc.totalprice.toString()} ",
                       textAlign: TextAlign.start,
                       style: const TextStyle(
                         fontSize: 15,

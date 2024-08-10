@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
+import 'package:store_app/core/constants/constant.dart';
 import 'package:store_app/core/viewmodel/cart_viewmodel.dart';
 import 'package:store_app/core/viewmodel/userController.dart';
 import 'package:store_app/models/cart_model.dart';
@@ -13,6 +14,7 @@ class ItemDetail3 extends StatelessWidget {
     super.key,
     required this.data2,
   });
+  int low = lows.lowStack;
   userController cc = Get.put(userController());
   @override
   Widget build(BuildContext context) {
@@ -30,9 +32,9 @@ class ItemDetail3 extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               (data2.repoInfo.price != null)
-                  ? (data2.repoInfo.price! > 75)
+                  ? (data2.repoInfo.currantQuantity >= low)
                       ? Text(
-                          "${data2.repoInfo.price} s.p",
+                          "\$${data2.repoInfo.price}",
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 19,
@@ -61,15 +63,17 @@ class ItemDetail3 extends StatelessWidget {
                   builder: (contrlar) {
                     return InkWell(
                       onTap: () {
-                        contrlar.add(
-                          data2.id
-                        );
+                        (data2.repoInfo.currantQuantity >= low)
+                            ? contrlar.add(data2.id)
+                            : null;
                       },
                       child: Container(
                         width: 190,
                         height: 50,
                         decoration: BoxDecoration(
-                          color: Colors.red,
+                          color: (data2.repoInfo.currantQuantity < low)
+                              ? Colors.grey
+                              : Colors.red,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: const Row(

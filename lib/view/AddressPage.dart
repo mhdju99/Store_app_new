@@ -22,7 +22,9 @@ class AddressPage extends StatelessWidget {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
           onPressed: () {
-            ADD_SUPLAYER_DIALOG();
+            if (cc.Barnds.isEmpty) {
+              ADD_SUPLAYER_DIALOG();
+            }
           },
           child: const Icon(Icons.add),
         ),

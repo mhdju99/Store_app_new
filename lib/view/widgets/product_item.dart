@@ -1,3 +1,4 @@
+import 'package:store_app/core/constants/constant.dart';
 import 'package:store_app/core/viewmodel/homePage_viewmodel.dart';
 import 'package:store_app/models/poduct_model.dart';
 import 'package:store_app/models/product/product.dart';
@@ -67,8 +68,8 @@ class product_card extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   (product.repoInfo.price != null)
-                      ?   ( product.repoInfo!.price! >75 )?Text(
-                          "${product.repoInfo.price} s.p",
+                      ?   ( product.repoInfo.currantQuantity >= lows.lowStack )?Text(
+                          "\$${product.repoInfo.price} ",
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.orange,

@@ -17,7 +17,7 @@ class CartController extends GetxController {
     super.onInit();
   }
 
-  var _product = <CartItem>[].obs;
+  final _product = <CartItem>[].obs;
   int totalprice = 0;
   String? CartID;
   List<CartItem> get product => _product;
@@ -26,15 +26,16 @@ class CartController extends GetxController {
   void add(String id) async {
     var data = await CartService().Addcart(id);
     if (data) {
-      Get.rawSnackbar(message: "add succsess", duration: Duration(seconds: 2));
+      Get.rawSnackbar(
+          message: "Added successfully", duration: const Duration(seconds: 2));
 
       getallProduct();
       // return false;
     }
-    if (!data) {
-      Get.snackbar("title", "errorr", duration: Duration(seconds: 2));
-      // return true;
-    }
+    // if (!data) {
+    //   Get.snackbar("warning", "Erorr", duration: const Duration(seconds: 2));
+    //   // return true;
+    // }
   }
   // addProduct(Cart cart) async {
   //   int index =
@@ -57,39 +58,51 @@ class CartController extends GetxController {
     // return null;
   }
 
-  incrise(String id) async {
+  incrise(String id, int max) async {
+    int maaax = 10;
     int index = _product.indexWhere((val) => val.id == id);
-    int q = _product[index].quantity! + 1;
-    print(_product[index].quantity);
-    _product[index].quantity = q;
-    update();
-    print(_product[index].quantity);
-    var state = await CartService().update(id, q);
-    if (!state) {
-      Get.snackbar("title", "Erorr");
-      // return false;
+    if (_product[index].quantity! < maaax) {
+      int q = _product[index].quantity! + 1;
+      print(_product[index].quantity);
+      _product[index].quantity = q;
+      update();
+      print(_product[index].quantity);
+      var state = await CartService().update(id, q);
+      if (!state) {
+        Get.snackbar("title", "Erorr");
+        // return false;
+      }
+    } else if (_product[index].quantity! == maaax) {
+      Get.snackbar(
+        "warning",
+        "There are not enough quantities",
+        backgroundColor: Colors.blueGrey.shade100,
+      );
     }
   }
 
   decrise(String id) async {
     int index = _product.indexWhere((val) => val.id == id);
-    _product[index].quantity = _product[index].quantity! - 1;
-    int q = _product[index].quantity! - 1;
-    _product[index].quantity = q;
-    update();
-    var state = await CartService().update(id, q);
-    if (!state) {
-      Get.snackbar("title", "Erorr");
-      // return false;
+    if (_product[index].quantity! != 0) {
+      _product[index].quantity = _product[index].quantity! - 1;
+      int q = _product[index].quantity! - 1;
+      _product[index].quantity = q;
+      update();
+      var state = await CartService().update(id, q);
+      if (!state) {
+        Get.snackbar("warning", "Error");
+        // return false;
+      }
     }
   }
-  Future<bool> checkout(String id) async {
 
-    var state = await CartService().checkout(id,);
+  Future<bool> checkout(String id) async {
+    var state = await CartService().checkout(
+      id,
+    );
     if (state) {
-       return true;
-    }
-    else{
+      return true;
+    } else {
       return false;
     }
   }
@@ -103,22 +116,20 @@ class CartController extends GetxController {
     try {
       loading(true);
       var data = await CartService().getcart();
-      if (data != null) {
-        _product.value = data.cartItems!;
-        totalprice = data.totalPrice!;
-        CartID = data.id;
-      }
+      _product.value = data.cartItems!;
+      totalprice = data.totalPrice!;
+      CartID = data.id;
     } finally {
       loading(false);
     }
   }
 
   double get price {
-    return product!
-        .fold(0, (sum, item) => sum + (item.price! * item.quantity!.toInt()));
+    return product.fold(
+        0, (sum, item) => sum + (item.price! * item.quantity!.toInt()));
   }
 
-  bool get isempity => product!.isEmpty;
+  bool get isempity => product.isEmpty;
 }
 
 // class BrandController extends GetxController {

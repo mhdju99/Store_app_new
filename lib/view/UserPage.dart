@@ -5,6 +5,7 @@ import 'package:store_app/core/viewmodel/landing_viewmodel.dart';
 import 'package:store_app/core/viewmodel/userController.dart';
 import 'package:store_app/view/AddressPage.dart';
 import 'package:store_app/view/home_page.dart';
+import 'package:store_app/view/myorder.dart';
 import 'package:store_app/view/onBorder.dart';
 import 'package:store_app/view/orderPAge.dart';
 import 'package:store_app/view/widgets/CustomButton.dart';
@@ -62,19 +63,24 @@ class UserPage extends StatelessWidget {
             color: Colors.grey[200],
             child: Column(
               children: [
-                const SizedBox(
+                SizedBox(
                   height: 40,
-                  child: ListTile(
-                    leading: Icon(Icons.task_alt_sharp),
-                    title: Text(
-                      "My Order",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontFamily: "Metropolis",
-                        fontWeight: FontWeight.w700,
+                  child: InkWell(
+                    onTap: () {
+                      Get.to( MyOredr());
+                    },
+                    child: const ListTile(
+                      leading: Icon(Icons.task_alt_sharp),
+                      title: Text(
+                        "My Order",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: "Metropolis",
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
+                      trailing: Icon(Icons.arrow_right),
                     ),
-                    trailing: Icon(Icons.arrow_right),
                   ),
                 ),
                 const Divider(),
