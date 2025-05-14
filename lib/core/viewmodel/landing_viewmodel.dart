@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:store_app/view/cart.dart';
 import 'package:store_app/view/home_page.dart';
 import 'package:store_app/view/UserPage.dart';
+import 'package:store_app/view/searchPage.dart';
 
 class LandingPageController extends GetxController {
   var tabIndex = 0;
@@ -43,12 +44,19 @@ class LandingPageController extends GetxController {
         update();
 
         break;
-      case 1:
+
+        case 1:
+        currentTab = Searchpage();
+        update();
+
+        break;
+        
+      case 2:
         currentTab = Cart();
         update();
 
         break;
-      case 2:
+      case 3:
         currentTab = UserPage();
         update();
 

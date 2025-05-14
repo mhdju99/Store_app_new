@@ -13,37 +13,48 @@ class LandingPage extends StatelessWidget {
     return GetBuilder<LandingPageController>(
         init: LandingPageController(),
         builder: (controlar) => WillPopScope(
-          onWillPop:lading.onWillPop ,
-          child: Scaffold(
-              body: controlar.currentTab,
-              bottomNavigationBar: BottomNavigationBar(
-                selectedItemColor: Colors.orange,
-                items: const [
-                  BottomNavigationBarItem(
-                      icon: Icon(
-                        Icons.home_outlined,
-                        size: 30,
-                      ),
-                      label: "Home"),
-                  BottomNavigationBarItem(
-                      icon: Icon(
-                        Icons.shopping_bag_outlined,
-                        size: 30,
-                      ),
-                      label: "Cart"),
-                  BottomNavigationBarItem(
-                      icon: Icon(
-                        Icons.person_2_outlined,
-                        size: 30,
-                      ),
-                      label: "Profile"),
-                ],
-                currentIndex: controlar.tabIndex,
-                onTap: (index) {
-                  controlar.changTabIndex(index);
-                  controlar.changPage(index);
-                },
-              )),
-        ));
+              onWillPop: lading.onWillPop,
+              child: Scaffold(
+                  body: controlar.currentTab,
+                  bottomNavigationBar: BottomNavigationBar(
+                    selectedFontSize: 14,
+                    
+                    selectedIconTheme: const IconThemeData(size: 19),
+                    showUnselectedLabels: true,
+                    selectedItemColor: Colors.orange,
+                    unselectedItemColor: Colors.grey.shade600,
+                    items: const [
+                      BottomNavigationBarItem(
+                          icon: Icon(
+                            Icons.home_outlined,
+                            size: 30,
+                          ),
+                          label: "Home"),
+                      BottomNavigationBarItem(
+                          icon: Icon(
+                            Icons.search,
+                            size: 30,
+                          ),
+                          label: "Search"),
+                      BottomNavigationBarItem(
+                          icon: Icon(
+                            Icons.shopping_bag_outlined,
+                            size: 30,
+                          ),
+                          label: "Cart"),
+                      BottomNavigationBarItem(
+                          icon: Icon(
+                            Icons.person_2_outlined,
+                            size: 30,
+                          ),
+                          label: "Profile"),
+                    ],
+                    currentIndex: controlar.tabIndex,
+                    onTap: (index) {
+                      controlar.changTabIndex(index);
+                      controlar.changPage(index);
+                    },
+                  )),
+            ));
   }
 }

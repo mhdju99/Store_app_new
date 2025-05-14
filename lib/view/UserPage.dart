@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:store_app/core/viewmodel/AuthenticationManager%20.dart';
 import 'package:store_app/core/viewmodel/landing_viewmodel.dart';
 import 'package:store_app/core/viewmodel/userController.dart';
-import 'package:store_app/view/AddressPage.dart';
 import 'package:store_app/view/home_page.dart';
 import 'package:store_app/view/myorder.dart';
 import 'package:store_app/view/onBorder.dart';
@@ -84,28 +83,28 @@ class UserPage extends StatelessWidget {
                   ),
                 ),
                 const Divider(),
-                InkWell(
-                  onTap: () => Get.to(AddressPage()),
-                  child: const SizedBox(
-                    height: 40,
-                    child: ListTile(
-                      leading: Icon(Icons.pin_drop),
-                      title: Text(
-                        "My Address",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: "Metropolis",
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      trailing: Icon(Icons.arrow_right),
-                    ),
-                  ),
-                ),
+                // InkWell(
+                //   onTap: () => Get.to(AddressPage()),
+                //   child: const SizedBox(
+                //     height: 40,
+                //     child: ListTile(
+                //       leading: Icon(Icons.pin_drop),
+                //       title: Text(
+                //         "My Address",
+                //         style: TextStyle(
+                //           fontSize: 16,
+                //           fontFamily: "Metropolis",
+                //           fontWeight: FontWeight.w700,
+                //         ),
+                //       ),
+                //       trailing: Icon(Icons.arrow_right),
+                //     ),
+                //   ),
+                // ),
                 const Divider(),
                 InkWell(
                   onTap: () {
-                    Get.to(wishlist());
+                    // Get.to(wishlist());
                   },
                   child: const SizedBox(
                     height: 50,

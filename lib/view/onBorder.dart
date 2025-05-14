@@ -9,12 +9,13 @@ class OnBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AuthenticationManager authManager = Get.find();
-    return Obx(() {
-      print("kkkkkkkkk      ${authManager.isLogged.value}    kkkkkkkkk");
+    return LogIn();
+    // Obx(() {
 
-      return 
-      // authManager.isLogged.value ? LandingPage() :
-       LogIn();
-    });
+    //   return
+    //   // authManager.isLogged.value ? LandingPage() :
+    //    LogIn();
+    // }
+    // );
   }
 }

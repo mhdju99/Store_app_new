@@ -52,12 +52,12 @@ class catogore extends StatelessWidget {
       return Icons.phone_android;
     } else if (name == "camera") {
       return Icons.camera_alt_outlined;
-    } else if (name == "smart tv") {
-      return Icons.tv;
-    } else if (name == "headphone") {
-      return Icons.headphones;
+    } else if (name == "routers") {
+      return Icons.route;
+    } else if (name == "security camera") {
+      return Icons.camera;
     } else {
-      return Icons.phone_android;
+      return Icons.woman_2_sharp;
     }
   }
 }

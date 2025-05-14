@@ -3,19 +3,15 @@ import 'package:get/get.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:store_app/core/services/CartService..dart';
 import 'package:store_app/helper/db_helper.dart';
-import 'package:store_app/models/cart_data/cart_data.dart';
 import 'package:store_app/models/cart_data/cart_item.dart';
 import 'package:store_app/models/cart_model.dart';
+import 'package:store_app/models/poduct_model.dart';
 
 class CartController extends GetxController {
+  String? selectedSize = "";
   // CartController() {
   //   // getallProduct();
   // }
-  @override
-  void onInit() {
-    getallProduct();
-    super.onInit();
-  }
 
   final _product = <CartItem>[].obs;
   int totalprice = 0;
@@ -23,55 +19,51 @@ class CartController extends GetxController {
   List<CartItem> get product => _product;
 
   var loading = false.obs;
-  void add(String id) async {
-    var data = await CartService().Addcart(id);
-    if (data) {
+  void add(CartItem item) {
+    int index = product.indexWhere((element) =>
+        element.product == item.product && element.size == item.size);
+    if (index == -1) {
+      _product.add(item);
       Get.rawSnackbar(
-          message: "Added successfully", duration: const Duration(seconds: 2));
-
-      getallProduct();
-      // return false;
+          message: "Added successfully", duration: const Duration(seconds: 1));
+    } else {
+      Get.snackbar("warning", "product alredy in cart",
+          duration: const Duration(seconds: 1));
     }
-    // if (!data) {
-    //   Get.snackbar("warning", "Erorr", duration: const Duration(seconds: 2));
-    //   // return true;
-    // }
+    update();
   }
-  // addProduct(Cart cart) async {
-  //   int index =
-  //       product!.indexWhere((element) => element.Productid == cart.Productid);
-  //   if (index == -1) {
-  //     Database? db = await Sqllite().insertData(cart);
-  //     getallProduct();
-  //   }
-  // }
 
-  void del(String id) async {
-    _product.removeWhere((val) => val.id == id);
+  void changeSize(String newsize) {
+    selectedSize = newsize;
+    update();
+  }
 
-    var state = await CartService().delItemcart(id);
-    if (!state) {
-      Get.snackbar("title", "Erorr");
-      // return false;
-    }
+  void resitSize() {
+    selectedSize = "";
+    update();
+  }
+
+  void del(CartItem item) async {
+    _product.removeWhere((val) => val == item);
+    update();
 
     // return null;
   }
 
-  incrise(String id, int max) async {
+  List<String> extractSizes(List<Quantity> sizesData) {
+    return sizesData
+        .where((val) => val.quantity != 0)
+        .map((Quantity) => Quantity.size)
+        .toList();
+  }
+
+  incrise(CartItem item, int max) {
     int maaax = 10;
-    int index = _product.indexWhere((val) => val.id == id);
+    int index = _product.indexWhere((val) => val == item);
     if (_product[index].quantity! < maaax) {
       int q = _product[index].quantity! + 1;
-      print(_product[index].quantity);
       _product[index].quantity = q;
       update();
-      print(_product[index].quantity);
-      var state = await CartService().update(id, q);
-      if (!state) {
-        Get.snackbar("title", "Erorr");
-        // return false;
-      }
     } else if (_product[index].quantity! == maaax) {
       Get.snackbar(
         "warning",
@@ -81,25 +73,24 @@ class CartController extends GetxController {
     }
   }
 
-  decrise(String id) async {
-    int index = _product.indexWhere((val) => val.id == id);
-    if (_product[index].quantity! != 0) {
+  decrise(CartItem item) {
+    int index = _product.indexWhere((val) => val == item);
+    if (_product[index].quantity! != 1) {
       _product[index].quantity = _product[index].quantity! - 1;
-      int q = _product[index].quantity! - 1;
-      _product[index].quantity = q;
+
       update();
-      var state = await CartService().update(id, q);
-      if (!state) {
-        Get.snackbar("warning", "Error");
-        // return false;
-      }
     }
   }
 
-  Future<bool> checkout(String id) async {
-    var state = await CartService().checkout(
-      id,
-    );
+  Future<bool> checkout(List<CartItem> items) async {
+    List body = items.map((item) {
+      return {
+        "product": {"_id": item.product.id},
+        "quantity": item.quantity,
+        "size": item.size
+      };
+    }).toList();
+    var state = await CartService().checkout(body);
     if (state) {
       return true;
     } else {
@@ -112,21 +103,21 @@ class CartController extends GetxController {
   //   update();
   // }
 
-  getallProduct() async {
-    try {
-      loading(true);
-      var data = await CartService().getcart();
-      _product.value = data.cartItems!;
-      totalprice = data.totalPrice!;
-      CartID = data.id;
-    } finally {
-      loading(false);
-    }
-  }
+  // getallProduct() async {
+  //   try {
+  //     loading(true);
+  //     var data = await CartService().getcart();
+  //     _product.value = data.cartItems!;
+  //     totalprice = data.totalPrice!;
+  //     CartID = data.id;
+  //   } finally {
+  //     loading(false);
+  //   }
+  // }
 
   double get price {
     return product.fold(
-        0, (sum, item) => sum + (item.price! * item.quantity!.toInt()));
+        0, (sum, item) => sum + (item.product.price * item.quantity!.toInt()));
   }
 
   bool get isempity => product.isEmpty;

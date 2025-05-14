@@ -2,28 +2,40 @@ import 'dart:ffi';
 
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
+import 'package:store_app/core/services/CountryService.dart';
 import 'package:store_app/core/services/logInService.dart';
 import 'package:store_app/core/services/signUpServices.dart';
 import 'package:store_app/core/viewmodel/AuthenticationManager%20.dart';
 import 'package:store_app/core/viewmodel/userController.dart';
+import 'package:store_app/models/CountryModel.dart';
 import 'package:store_app/view/LandingPage.dart';
 import 'package:store_app/view/onBorder.dart';
 
 class AuthController extends GetxController {
   late AuthenticationManager _authManager;
   userController cc = Get.put(userController());
+  final CountryService _countryService = CountryService();
+
   RxBool isLoading = false.obs;
   var obscureText = true.obs;
+  var countries = <String>[].obs;
+  var isLoadingC = true.obs;
+  var isOriginalContent = false.obs;
 
-  String? email, password, name, pp;
+  String? email, password, name, city, country, address, pp;
   @override
   void onInit() {
     super.onInit();
     _authManager = Get.find();
+    fetchCountries();
   }
 
   void toggle() {
     obscureText.value = !obscureText.value;
+  }
+
+  void toggleContent() {
+    isOriginalContent.value = !isOriginalContent.value;
   }
 
   validateEmail(String? Email) {
@@ -31,6 +43,19 @@ class AuthController extends GetxController {
       return "email not correct";
     } else {
       return null;
+    }
+  }
+
+  void fetchCountries() async {
+    try {
+      isLoadingC(true);
+      CountryModel countryModel = await _countryService.getCountry();
+
+      if (countryModel.success) {
+        countries.assignAll(countryModel.countries);
+      }
+    } finally {
+      isLoadingC(false);
     }
   }
 
@@ -54,6 +79,9 @@ class AuthController extends GetxController {
     var result = await SignUpServices(
       dio: Dio(),
     ).signUp(
+        address: address.toString(),
+        city: city.toString(),
+        country: country.toString(),
         name: name.toString(),
         email: email.toString(),
         password: password.toString());
@@ -62,28 +90,27 @@ class AuthController extends GetxController {
       Get.snackbar("success", "success");
       Get.offAll(const OnBoard());
     } else {
+      isLoading.value = false;
+
       Get.snackbar(
           result.statusCode.toString(), result.statusMessage.toString());
     }
   }
 
   login() async {
-
-    var result = await LogInServices(
-      dio: Dio(),
-    ).logIn(email: email.toString(), password: password.toString());
+    var result = await LogInServices()
+        .logIn(email: email.toString(), password: password.toString());
     isLoading.value = false;
     if (result != null) {
       _authManager.login(result.token);
       cc.email = result.email;
       cc.id = result.id;
       cc.name = result.name;
-      cc.wishlist.value = result.wishlist!;
       Get.offAll(
         LandingPage(),
       );
     } else {
-      Get.snackbar(".", "errror");
+      Get.snackbar(".", "The Username or Password is Incorrect");
     }
   }
 }

@@ -1,22 +1,14 @@
+
+import 'package:store_app/models/poduct_model.dart';
+
 class CartItem {
-	String? product;
-	int? price;
+	ProductData product;
+	String? size;
 	int? quantity;
-	String? id;
 
-	CartItem({this.product, this.price, this.quantity, this.id});
+	CartItem({ required this.product, this.quantity, this.size});
 
-	factory CartItem.fromJson(Map<String, dynamic> json) => CartItem(
-				product: json['product'] as String?,
-				price: json['price'] as int?,
-				quantity: json['quantity'] as int?,
-				id: json['_id'] as String?,
-			);
 
-	Map<String, dynamic> toJson() => {
-				'product': product,
-				'price': price,
-				'quantity': quantity,
-				'_id': id,
-			};
+
+	
 }

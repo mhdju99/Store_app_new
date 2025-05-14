@@ -10,19 +10,19 @@ class Api {
     // _dio.options.baseUrl = "http://localhost:8080/api/v1/";
     final String? token = cc.getToken();
     if (token != null) {
-      String t =
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRW1haWwiOiJrdXRhaWJhYWxuaXphZW15MjJAZ21haWwuY29tIiwidXNlcklkIjoiNjY5MjZmYWFjMDEwMDM2YTRlMzVkYTMzIiwiaWF0IjoxNzIwOTA2ODAzLCJleHAiOjE3MjA5OTMyMDN9.ge9OQq7Hick6dGwCm2jz1dyqMaZw301nSSFtWtxllOM";
-      _dios.options.headers = {"Authorization": "Bearer $token"};
+      _dios.options.headers = {"token":  token};
     }
   }
 
-  Future<Response?> get({required String endpoint}) async {
+  Future<Response?> get(
+      {required String endpoint, Map<String, dynamic>? header}) async {
     try {
       // Map<String, dynamic> headers = {};
 
       Response response = await _dios.get(endpoint,
           options: Options(
             contentType: Headers.jsonContentType,
+            headers: header,
             responseType: ResponseType.json,
           )
           // queryParameters: headers,
@@ -37,12 +37,14 @@ class Api {
   Future<Response?> post({
     required String endpoint,
     required var body,
-    String? token,
   }) async {
-    Map<String, dynamic> headers = {};
-    if (token != null) {
-      headers.addAll({"Authorization": "Bearer $token"});
-    }
+        final String? tokens = cc.getToken();
+
+    // Map<String, dynamic> headers = {};
+    // headers.addAll({"Authorization": "Bearer $tokens"});
+
+    // if (token != null) {
+    // }
     try {
       Response response = await _dios.post(endpoint,
           data: body,

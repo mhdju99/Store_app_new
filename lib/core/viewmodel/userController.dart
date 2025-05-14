@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:store_app/core/services/wishlistService.dart';
 
 class userController extends GetxController {
   String? email, name, id;
@@ -18,34 +17,34 @@ class userController extends GetxController {
     }
   }
 
-  void del(String id) async {
-    var state = await whishlistService().delBrand(id);
-    wishlist.remove(id);
+  // void del(String id) async {
+  //   var state = await whishlistService().delBrand(id);
+  //   wishlist.remove(id);
 
-    if (!state) {
-      Get.snackbar("title", "Erorr",
-      duration: Duration(seconds: 2));
-      // return false;
-    }
-    if (state) {
-      Get.rawSnackbar(message: "del succsess",
-      duration: Duration(seconds: 2));
+  //   if (!state) {
+  //     Get.snackbar("title", "Erorr",
+  //     duration: Duration(seconds: 2));
+  //     // return false;
+  //   }
+  //   if (state) {
+  //     Get.rawSnackbar(message: "del succsess",
+  //     duration: Duration(seconds: 2));
 
-    }
-  }
+  //   }
+  // }
 
-  void add(String id) async {
-    var data = await whishlistService().AddBrand(id);
-    wishlist.add(id);
-    if (data) {
-      Get.rawSnackbar(message: "add succsess",
-      duration: Duration(seconds: 2) );
-      // return false;
-    }
-    if (!data) {
-      Get.snackbar("title", "errorr",
-      duration: Duration(seconds: 2));
-      // return true;
-    }
-  }
+  // void add(String id) async {
+  //   var data = await whishlistService().AddBrand(id);
+  //   wishlist.add(id);
+  //   if (data) {
+  //     Get.rawSnackbar(message: "add succsess",
+  //     duration: Duration(seconds: 2) );
+  //     // return false;
+  //   }
+  //   if (!data) {
+  //     Get.snackbar("title", "errorr",
+  //     duration: Duration(seconds: 2));
+  //     // return true;
+  //   }
+  // }
 }

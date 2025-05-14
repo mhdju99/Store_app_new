@@ -1,7 +1,6 @@
-import 'package:store_app/core/constants/constant.dart';
+import 'package:store_app/core/constants/end_points.dart';
 import 'package:store_app/core/viewmodel/homePage_viewmodel.dart';
 import 'package:store_app/models/poduct_model.dart';
-import 'package:store_app/models/product/product.dart';
 
 import 'package:store_app/view/itemDetail%20.dart';
 
@@ -23,7 +22,7 @@ class product_card extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.to(ItemDetail3(data2: product));
+        Get.to(ItemDetail3(product: product));
       },
       child: Card(
         elevation: 7,
@@ -35,8 +34,10 @@ class product_card extends StatelessWidget {
               child: Container(
                   alignment: Alignment.topCenter,
                   child: Image.network(
-                    product.imageCovered,
-                    fit: BoxFit.fitWidth,
+                    "${EndPoints.getimage_endpoint}?productId=${product.id}&imageName=${product.imagesNames[0]}.jpg",
+                    fit: BoxFit.fill,
+                    width: double.infinity,
+
                     height: 170,
                     // cc.Barnds[index].Image!,
                   )),
@@ -44,20 +45,14 @@ class product_card extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 11),
-              child: CustomText(
-                text: cc.FindBrand(product.brand!).toString(),
-                fontSize: 14,
-                coler: Colors.grey,
-                wight: FontWeight.bold,
-              ),
+            const Padding(
+              padding: EdgeInsets.only(left: 11),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 11),
               child: CustomText(
                 // text: cc.Barnds[index].BrandName!,
-                text: product.title,
+                text: product.name,
                 fontSize: 18,
                 wight: FontWeight.bold,
               ),
@@ -67,27 +62,13 @@ class product_card extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  (product.repoInfo.price != null)
-                      ?   ( product.repoInfo.currantQuantity >= lows.lowStack )?Text(
-                          "\$${product.repoInfo.price} ",
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.orange,
-                          ),
-                        ): Text(
-                              "Product Unavailable",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.red,
-                                  fontSize: 12),
-                            )
-                      : const Text(
-                          "Product Unavailable",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.red,
-                              fontSize: 12),
-                        )
+                 Text(
+                    "\$${product.price} ",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.orange,
+                    ),
+                  )
                 ],
               ),
             )

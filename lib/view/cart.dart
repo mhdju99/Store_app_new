@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:store_app/core/constants/end_points.dart';
 import 'package:store_app/core/viewmodel/AddressController.dart';
 import 'package:store_app/core/viewmodel/cart_viewmodel.dart';
 import 'package:store_app/core/viewmodel/homePage_viewmodel.dart';
-import 'package:store_app/models/product/product.dart';
 import 'package:store_app/view/itemDetail%20.dart';
+import 'package:store_app/view/succssesPage.dart';
 import 'package:store_app/view/transaction.dart';
 
 class Cart extends StatelessWidget {
@@ -123,19 +124,20 @@ class Cart extends StatelessWidget {
                                 itemBuilder: (c, index) {
                                   final item = cc.product[index];
 
-                                  var product =
-                                      pp.Findproduct(item.product.toString());
+                                  // var product =
+                                  //     pp.Findproduct(item.product.toString());
                                   // print(items);
 
                                   return Dismissible(
                                       background: slideRightBackground(),
                                       secondaryBackground:
                                           slideLeftBackground(),
-                                      key: Key(index.toString()),
+                                      key: Key(item.product.id),
                                       // direction: DismissDirection.endToStart,
 
                                       onDismissed: (dirction) {
-                                        cc.del(item.id!);
+                                        cc.del(item);
+
                                         // items.removeAt(index);
                                         // print(item.Productid!);
                                         // cc.dellProduct(item.Productid.toString());
@@ -153,7 +155,8 @@ class Cart extends StatelessWidget {
                                               SizedBox(
                                                 width: 60,
                                                 child: Image.network(
-                                                    product.imageCovered),
+                                                  "${EndPoints.getimage_endpoint}?productId=${item.product.id}&imageName=${item.product.imagesNames[0]}.jpg",
+                                                ),
                                               ),
                                               const SizedBox(
                                                 width: 20,
@@ -164,27 +167,53 @@ class Cart extends StatelessWidget {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  InkWell(
-                                                    onTap: () {
-                                                      Get.to(ItemDetail3(
-                                                          data2: product));
-                                                    },
-                                                    child: Text(
-                                                      product.title.toString(),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: const TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 14,
-                                                        fontFamily:
-                                                            "Metropolis",
-                                                        fontWeight:
-                                                            FontWeight.w300,
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      InkWell(
+                                                        onTap: () {
+                                                          Get.to(ItemDetail3(
+                                                              product: item
+                                                                  .product));
+                                                        },
+                                                        child: Text(
+                                                          item.product.name
+                                                              .toString(),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style:
+                                                              const TextStyle(
+                                                            color: Colors.black,
+                                                            fontSize: 14,
+                                                            fontFamily:
+                                                                "Metropolis",
+                                                            fontWeight:
+                                                                FontWeight.w300,
+                                                          ),
+                                                        ),
                                                       ),
-                                                    ),
+                                                      const SizedBox(
+                                                        width: 60,
+                                                      ),
+                                                      Text(
+                                                        item.size.toString(),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: const TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 14,
+                                                          fontFamily:
+                                                              "Metropolis",
+                                                          fontWeight:
+                                                              FontWeight.w900,
+                                                        ),
+                                                      )
+                                                    ],
                                                   ),
                                                   Text(
-                                                    "\$${item.price.toString()}",
+                                                    "\$${item.product.price.toString()}",
                                                     style: const TextStyle(
                                                       color: Colors.orange,
                                                       fontSize: 16,
@@ -224,11 +253,9 @@ class Cart extends StatelessWidget {
                                                             GestureDetector(
                                                                 onTap: () {
                                                                   cc.incrise(
-                                                                      item.id
-                                                                          .toString(),
-                                                                      product
-                                                                          .repoInfo
-                                                                          .currantQuantity);
+                                                                      item,
+                                                                      1000);
+
                                                                   // cc.incrise(
                                                                   //     index);
                                                                 },
@@ -259,9 +286,8 @@ class Cart extends StatelessWidget {
                                                                 child:
                                                                     GestureDetector(
                                                                   onTap: () {
-                                                                    cc.decrise(item
-                                                                        .id
-                                                                        .toString());
+                                                                    cc.decrise(
+                                                                        item);
                                                                   },
                                                                   child: const Icon(
                                                                       Icons
@@ -287,7 +313,7 @@ class Cart extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               SizedBox(
-                                height: 50,
+                                height: 70,
                                 child: Column(
                                   children: [
                                     const Text(
@@ -313,14 +339,21 @@ class Cart extends StatelessWidget {
                               ),
                               InkWell(
                                 onTap: () {
-                                  AddressController bb =
-                                      Get.put(AddressController());
-                                  if (bb.Barnds.isNotEmpty) {
-                                    Get.to(transactionPage());
-                                  } else {
-                                    Get.snackbar(
-                                        "warning", " add Delivery address  ");
-                                  }
+                                  Get.defaultDialog(
+                                      title: ' Alert',
+                                      middleText: 'Are you sure ?',
+                                      onConfirm: () async {
+                                        var state =
+                                            await cc.checkout(cc.product);
+                                        if (state) {
+                                          Get.to(succssesPage());
+                                        } else {
+                                          Get.snackbar("title", "Error");
+                                        }
+                                      },
+                                      textConfirm: 'yes',
+                                      confirmTextColor: Colors.amberAccent,
+                                      textCancel: 'No');
                                 },
                                 child: Container(
                                   width: 170,

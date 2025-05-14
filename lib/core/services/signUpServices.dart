@@ -11,16 +11,24 @@ class SignUpServices {
     required String email,
     required String name,
     required String password,
+    required String city,
+    required String address,
+    required String country,
   }) async {
     try {
       Response? data =
           await Api().post(endpoint: EndPoints.signup_endpoint, body: {
-        "email": email,
-        "password": password,
-        "name": name,
-        "passwordConfirmation": password
+        "user": {
+          "name": name,
+          "email": email,
+          "password": password,
+          "location": {
+            "country":country,
+            "city": city,
+            "address": address
+          }
+        }
       });
-      print(data);
       return data;
     } on DioException catch (e) {
       return e.response;

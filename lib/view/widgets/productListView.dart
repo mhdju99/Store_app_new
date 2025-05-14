@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:store_app/models/poduct_model.dart';
 
 
-import 'package:store_app/models/product/product.dart';
 
 import 'package:store_app/view/widgets/product_item.dart';
 
@@ -20,8 +19,8 @@ class ProductLIstView extends StatelessWidget {
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           mainAxisExtent: 260,
-          mainAxisSpacing: 20,
-          crossAxisSpacing: 10),
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 5),
       delegate: SliverChildBuilderDelegate(
 
           (context, index) => product_card(

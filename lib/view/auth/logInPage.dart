@@ -72,7 +72,7 @@ class LogIn extends StatelessWidget {
                                       : Icons.visibility),
                                 ),
                                 prefixIcon: const Icon(Icons.password_outlined),
-                                initial: cc.getPassword(),
+                                // initial: cc.getPassword(),
                                 onSave: (val) {
                                   authControlar.password = val;
                                 },
@@ -129,6 +129,7 @@ class LogIn extends StatelessWidget {
                   InkWell(
                     onTap: () {
                       Get.offAll(SignUP());
+                      authControlar.isOriginalContent = false.obs;
                     },
                     child: const Text(
                       "Sign Up",

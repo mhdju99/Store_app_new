@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 
 import 'package:http/http.dart';
 import 'package:dio/dio.dart' as ss;
-import 'package:store_app/core/services/brandService..dart';
 import 'package:store_app/models/address_model.dart';
 import 'package:store_app/models/brand_model.dart';
 

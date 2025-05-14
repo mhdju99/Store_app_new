@@ -11,6 +11,7 @@ class CustomTextField extends StatelessWidget {
   String? Function(String?)? validate;
   void Function(String?)? onSave;
   void Function(String?)? onchange;
+  void Function()? onEditingComplete;
   TextInputType? type;
   CustomTextField(
       {Key? key,
@@ -21,13 +22,14 @@ class CustomTextField extends StatelessWidget {
       this.initial,
       this.validate,
       this.onchange,
+      this.onEditingComplete,
       this.onSave})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      
+      onEditingComplete: onEditingComplete,
       onChanged: onchange,
       initialValue: initial,
       keyboardType: type,

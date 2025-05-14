@@ -1,21 +1,26 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
-import 'package:store_app/core/constants/constant.dart';
+import 'package:store_app/core/constants/end_points.dart';
 import 'package:store_app/core/viewmodel/cart_viewmodel.dart';
 import 'package:store_app/core/viewmodel/userController.dart';
+import 'package:store_app/models/cart_data/cart_item.dart';
 import 'package:store_app/models/cart_model.dart';
 import 'package:store_app/models/poduct_model.dart';
-import 'package:store_app/models/product/product.dart';
+import 'package:store_app/view/widgets/dropDown.dart';
 
 class ItemDetail3 extends StatelessWidget {
-  ProductData data2;
+  ProductData product;
+  String? size;
+  final _formKey = GlobalKey<FormState>();
+
   ItemDetail3({
     super.key,
-    required this.data2,
+    required this.product,
   });
-  int low = lows.lowStack;
   userController cc = Get.put(userController());
+  CartController cca = Get.put(CartController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,30 +36,14 @@ class ItemDetail3 extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              (data2.repoInfo.price != null)
-                  ? (data2.repoInfo.currantQuantity >= low)
-                      ? Text(
-                          "\$${data2.repoInfo.price}",
+             Text(
+                          "\$${product.price}",
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 19,
                             color: Colors.orange,
                           ),
-                        )
-                      : const Text(
-                          "Product Unavailable",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.red,
-                              fontSize: 13),
-                        )
-                  : const Text(
-                      "Product Unavailable",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red,
-                          fontSize: 13),
-                    ),
+                        ),
               const SizedBox(
                 width: 20,
               ),
@@ -63,17 +52,29 @@ class ItemDetail3 extends StatelessWidget {
                   builder: (contrlar) {
                     return InkWell(
                       onTap: () {
-                        (data2.repoInfo.currantQuantity >= low)
-                            ? contrlar.add(data2.id)
-                            : null;
+                        if (cca.selectedSize != "") {
+                          // _formKey.currentState!.save();
+                          cca.add(CartItem(
+                              product: product,
+                              quantity: 1,
+                              size: cca.selectedSize));
+                          cca.resitSize();
+                          print(
+                              "nnn"); // استدعاء save() فقط إذا كان النموذج صالحًا
+                        } else if (cca.selectedSize == "") {
+                          Get.snackbar(".", "select size before",
+                              duration: const Duration(seconds: 1));
+                        }
+
+                        // (1000 >= low)
+                        //     ? contrlar.add()
+                        //     : null;
                       },
                       child: Container(
                         width: 190,
                         height: 50,
                         decoration: BoxDecoration(
-                          color: (data2.repoInfo.currantQuantity < low)
-                              ? Colors.grey
-                              : Colors.red,
+                          // color: (1000 < low) ? Colors.grey : Colors.red,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: const Row(
@@ -105,15 +106,39 @@ class ItemDetail3 extends StatelessWidget {
           slivers: [
             SliverAppBar(
               flexibleSpace: FlexibleSpaceBar(
-                background: InstaImageViewer(
-                  child: Image(
-                    image:
-                        Image.network(fit: BoxFit.fitWidth, data2.imageCovered)
-                            .image,
+                background: CarouselSlider(
+                  options: CarouselOptions(
+                    aspectRatio: 16 / 9,
+                    viewportFraction: 0.8,
+                    enlargeCenterPage: true,
+                    height: double.infinity,
+                    enableInfiniteScroll: false,
+                    enlargeFactor: 0.3,
+                    reverse: false,
                   ),
+                  items: [1, 2, 3, 4, 5].map((i) {
+                    return Builder(
+                      builder: (BuildContext context) {
+                        return Container(
+                            width: MediaQuery.of(context).size.width,
+                            margin: const EdgeInsets.symmetric(horizontal: 1.0),
+                            // decoration:
+                            //     const BoxDecoration(color: Colors.amber),
+                            child: InstaImageViewer(
+                              child: Image(
+                                width: double.infinity,
+                                image: Image.network(
+                                  fit: BoxFit.fitWidth,
+                                  "${EndPoints.getimage_endpoint}?productId=${product.id}&imageName=${product.imagesNames[0]}.jpg",
+                                ).image,
+                              ),
+                            ));
+                      },
+                    );
+                  }).toList(),
                 ),
               ),
-              expandedHeight: 350,
+              expandedHeight: 300,
               backgroundColor: Colors.white,
               bottom: PreferredSize(
                 preferredSize: const Size.fromHeight(10),
@@ -152,17 +177,17 @@ class ItemDetail3 extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: InkWell(
                     onTap: () {
-                      if (!cc.isInWishList(data2.id)) {
-                        cc.add(data2.id);
+                      if (!cc.isInWishList(product.id)) {
+                        // cc.add(product.id);
                       } else {
-                        cc.del(data2.id);
+                        // cc.del(product.id);
                       }
                     },
                     child: CircleAvatar(
                       backgroundColor: const Color.fromRGBO(250, 250, 250, 0.6),
                       radius: 18,
                       child: Obx(() => Icon(
-                            cc.isInWishList(data2.id)
+                            cc.isInWishList(product.id)
                                 ? Icons.favorite
                                 : Icons.favorite_border,
                             color: Colors.red,
@@ -192,6 +217,7 @@ class ItemDetail3 extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 5),
               sliver: SliverToBoxAdapter(
                 child: Container(
+                  height: 600,
                   padding: const EdgeInsets.symmetric(horizontal: 14),
                   color: Colors.grey.withOpacity(0.2),
                   child: Column(
@@ -199,7 +225,7 @@ class ItemDetail3 extends StatelessWidget {
                     children: [
                       const SizedBox(height: 20),
                       Text(
-                        data2.title,
+                        product.name,
                         style: const TextStyle(
                           fontSize: 24,
                           color: Colors.black,
@@ -237,7 +263,7 @@ class ItemDetail3 extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 20),
                         child: Text(
-                          data2.description,
+                          product.description ?? ".",
                           style: TextStyle(
                             fontSize: 16,
                             color: Colors.grey.shade600,
@@ -245,6 +271,62 @@ class ItemDetail3 extends StatelessWidget {
                           ),
                         ),
                       ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: Center(
+                          child: Column(
+                            children: [
+                              // Form(
+                              //   key: _formKey,
+                              //   child: dropDown(
+                              //     genderItems: cca
+                              //         .extractSizes(data2.quantities.toList()),
+                              //     name: "size",
+                              //     onSave: (Valuea) {
+                              //       size = Valuea;
+                              //     },
+                              //   ),
+                              // ),
+                              GetBuilder<CartController>(builder: (controller) {
+                                return SegmentedButton<String>(
+                                  segments: cca
+                                      .extractSizes(product.quantities.toList())
+                                      .map((sizes) => ButtonSegment<String>(
+                                            value: sizes,
+                                            label: Text(sizes),
+                                          ))
+                                      .toList(),
+                                  selected: {
+                                    controller.selectedSize.toString()
+                                  },
+                                  onSelectionChanged:
+                                      (Set<String> newSelection) {
+                                    controller.changeSize(newSelection.first);
+                                  },
+                                  showSelectedIcon: false,
+                                  style: ButtonStyle(
+                                    tapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
+                                    visualDensity: VisualDensity.standard,
+                                    textStyle: WidgetStateProperty.resolveWith<
+                                        TextStyle>(
+                                      (Set<WidgetState> states) {
+                                        if (states
+                                            .contains(WidgetState.selected)) {
+                                          return const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold);
+                                        }
+                                        return const TextStyle(fontSize: 14);
+                                      },
+                                    ),
+                                  ),
+                                );
+                              }),
+                            ],
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 ),

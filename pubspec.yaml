@@ -28,8 +28,10 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  carousel_slider: ^5.0.0
   cupertino_icons: ^1.0.2
   dio: ^5.4.3+1
+  dropdown_button2: ^2.3.9
   flutter:
     sdk: flutter
   flutter_rating_bar: ^4.0.1
@@ -37,8 +39,10 @@ dependencies:
   get: ^4.6.6
   get_storage: ^2.1.1
   icons_plus: ^5.0.0
+  image_picker: ^1.1.2
   insta_image_viewer: ^1.0.4
   path: ^1.9.0
+  path_provider: ^2.1.4
   sqflite: ^2.3.2
 
 dev_dependencies:

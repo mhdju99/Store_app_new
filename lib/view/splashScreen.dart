@@ -37,7 +37,7 @@ class SplashView extends StatelessWidget {
   }
 
   Scaffold waitingView() {
-    return const Scaffold(
+    return  Scaffold(
         body: Center(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -45,7 +45,11 @@ class SplashView extends StatelessWidget {
         children: [
           Padding(
             padding: EdgeInsets.all(16.0),
-            child: CircularProgressIndicator(),
+            child: SizedBox(
+              height: 100,
+              width: 100,
+              child: Image.asset("assets/images/progress.gif"),
+            ),
           ),
           Text('Loading...'),
         ],

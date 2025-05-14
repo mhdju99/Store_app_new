@@ -1,132 +1,80 @@
-import 'package:store_app/core/constants/end_points.dart';
-import 'package:store_app/models/repo_mode.dart';
-
 class ProductData {
-  final String id;
-  final String title;
-  final String slug;
-  final String description;
-  final List<String>? colors;
-  final List<String> images;
-  final String imageCovered;
-  final Category category;
-  final List<dynamic>? subCategory;
-  final String? brand;
-  final int? ratingsAverage;
-  final int? ratingsQuantity;
-  final int v;
-  final RepoInfo repoInfo;
+  String id;
+  String publisherId;
+  List<Review> reviews;
+  String name;
+  double price;
+  String? description;
+  String category;
+  List<String> imagesNames;
+  List<Quantity> quantities;
+  DateTime createdAt;
 
   ProductData({
     required this.id,
-    required this.title,
-    required this.slug,
-    required this.description,
-    required this.colors,
-    required this.images,
-    required this.imageCovered,
+    required this.publisherId,
+    required this.reviews,
+    required this.name,
+    required this.price,
+    this.description,
     required this.category,
-    required this.subCategory,
-    required this.brand,
-    required this.ratingsAverage,
-    required this.ratingsQuantity,
-    required this.v,
-    required this.repoInfo,
+    required this.imagesNames,
+    required this.quantities,
+    required this.createdAt,
   });
 
   factory ProductData.fromJson(Map<String, dynamic> json) {
-    return ProductData(
-      id: json['_id'],
-      title: json['title'],
-      slug: json['slug'],
-      description: json['description'],
-      colors: List<String>.from(json['colors']),
-      images: List<String>.from(json['images']),
-      imageCovered: json['imageCovered'].replaceAll("localhost", EndPoints.ip),
-      category: Category.fromJson(json['category']),
-      subCategory: List<dynamic>.from(json['subCategory']),
-      brand: json['brand'],
-      ratingsAverage: json['ratingsAverage'],
-      ratingsQuantity: json['ratingsQuantity'],
-      v: json['__v'],
-      repoInfo: RepoInfo.fromJson(json['repoInfo']),
-    );
-  }
+    var reviewsFromJson = json['reviews'] as List;
+    List<Review> reviewsList =
+        reviewsFromJson.map((i) => Review.fromJson(i)).toList();
 
-  Map<String, dynamic> toJson() {
-    return {
-      '_id': id,
-      'title': title,
-      'slug': slug,
-      'description': description,
-      'colors': colors,
-      'images': images,
-      'imageCovered': imageCovered,
-      'category': category.toJson(),
-      'subCategory': subCategory,
-      'brand': brand,
-      'ratingsAverage': ratingsAverage,
-      'ratingsQuantity': ratingsQuantity,
-      '__v': v,
-      // 'repoInfo': repoInfo.toJson(),
-    };
-  }
+    var quantitiesFromJson = json['quantities'] as List;
+    List<Quantity> quantitiesList =
+        quantitiesFromJson.map((i) => Quantity.fromJson(i)).toList();
 
-  ProductData copyWith({
-    String? id,
-    String? title,
-    String? slug,
-    String? description,
-    List<String>? colors,
-    List<String>? images,
-    String? imageCovered,
-    Category? category,
-    List<dynamic>? subCategory,
-    String? brand,
-    int? ratingsAverage,
-    int? ratingsQuantity,
-    int? v,
-    RepoInfo? repoInfo,
-  }) {
     return ProductData(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      slug: slug ?? this.slug,
-      description: description ?? this.description,
-      colors: colors ?? this.colors,
-      images: images ?? this.images,
-      imageCovered: imageCovered ?? this.imageCovered,
-      category: category ?? this.category,
-      subCategory: subCategory ?? this.subCategory,
-      brand: brand ?? this.brand,
-      ratingsAverage: ratingsAverage ?? this.ratingsAverage,
-      ratingsQuantity: ratingsQuantity ?? this.ratingsQuantity,
-      v: v ?? this.v,
-      repoInfo: repoInfo ?? this.repoInfo,
+      id: json['_id'] ?? '', // تعيين قيمة افتراضية إذا كانت null
+      publisherId:
+          json['publisherId'] ?? '', // تعيين قيمة افتراضية إذا كانت null
+      reviews: reviewsList,
+      name: json['name'] ?? '', // تعيين قيمة افتراضية إذا كانت null
+      price:
+          (json['price'] ?? 0).toDouble(), // تعيين قيمة افتراضية إذا كانت null
+      description: json['description'], // يمكن أن تكون null
+      category: json['category'] ?? '', // تعيين قيمة افتراضية إذا كانت null
+      imagesNames: List<String>.from(
+          json['imagesNames'] ?? []), // تعيين قيمة افتراضية إذا كانت null
+      quantities: quantitiesList,
+      createdAt: DateTime.parse(json['createdAt']),
     );
   }
 }
 
-class Category {
-  final String id;
-  final String name;
+class Review {
+  // يمكنك إضافة خصائص المراجعة هنا إذا كانت موجودة
+  Review();
 
-  Category({
+  factory Review.fromJson(Map<String, dynamic> json) {
+    return Review();
+  }
+}
+
+class Quantity {
+  String size;
+  int quantity;
+  String id;
+
+  Quantity({
+    required this.size,
+    required this.quantity,
     required this.id,
-    required this.name,
   });
 
-  factory Category.fromJson(Map<String, dynamic> json) {
-    return Category(
+  factory Quantity.fromJson(Map<String, dynamic> json) {
+    return Quantity(
+      size: json['size'],
+      quantity: json['quantity'],
       id: json['_id'],
-      name: json['name'],
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      '_id': id,
-      'name': name,
-    };
   }
 }
