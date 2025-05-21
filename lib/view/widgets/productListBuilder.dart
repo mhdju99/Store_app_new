@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:store_app/core/viewmodel/homePage_viewmodel.dart';
+import 'package:store_app/controllers/homePage_viewmodel.dart';
 
 import 'package:store_app/view/widgets/productListView.dart';
 

@@ -1,8 +1,8 @@
-import 'package:store_app/core/constants/end_points.dart';
-import 'package:store_app/core/viewmodel/homePage_viewmodel.dart';
+import 'package:store_app/utils/constants/end_points.dart';
+import 'package:store_app/controllers/homePage_viewmodel.dart';
 import 'package:store_app/models/poduct_model.dart';
 
-import 'package:store_app/view/itemDetail%20.dart';
+import 'package:store_app/view/widgets/itemDetail%20.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
