@@ -15,7 +15,7 @@ class ProductLIstView extends StatelessWidget {
     return SliverGrid(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          mainAxisExtent: 260,
+          mainAxisExtent: 230,
           mainAxisSpacing: 10,
           crossAxisSpacing: 5),
       delegate: SliverChildBuilderDelegate(

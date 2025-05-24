@@ -30,23 +30,18 @@ class product_card extends StatelessWidget {
           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: Container(
-                  alignment: Alignment.topCenter,
-                  child: Image.network(
-                    "${EndPoints.getimage_endpoint}?productId=${product.id}&imageName=${product.imagesNames[0]}.jpg",
-                    fit: BoxFit.fill,
-                    width: double.infinity,
+            Container(
+                alignment: Alignment.topCenter,
+                child: Image.network(
+                  "${EndPoints.getimage_endpoint}?productId=${product.id}&imageName=${product.imagesNames[0]}.jpg",
+                  fit: BoxFit.fill,
+                  width: double.infinity,
 
-                    height: 170,
-                    // cc.Barnds[index].Image!,
-                  )),
-            ),
+                  height: 160,
+                  // cc.Barnds[index].Image!,
+                )),
             const SizedBox(
-              height: 10,
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 11),
+              height: 4,
             ),
             Padding(
               padding: const EdgeInsets.only(left: 11),
@@ -62,7 +57,7 @@ class product_card extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                 Text(
+                  Text(
                     "\$${product.price} ",
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,

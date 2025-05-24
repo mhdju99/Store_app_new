@@ -4,13 +4,18 @@ import 'package:store_app/controllers/AuthenticationManager%20.dart';
 
 class Api {
   AuthenticationManager cc = g.Get.find();
-  final _dios = Dio(BaseOptions());
+  final _dios = Dio(BaseOptions(
+    connectTimeout: const Duration(seconds: 15),
+    sendTimeout: const Duration(seconds: 15),
+    receiveTimeout: const Duration(seconds: 15),
+    validateStatus: (status) => true,
+  ));
 
   Api() {
     // _dio.options.baseUrl = "http://localhost:8080/api/v1/";
     final String? token = cc.getToken();
     if (token != null) {
-      _dios.options.headers = {"token":  token};
+      _dios.options.headers = {"token": token};
     }
   }
 
@@ -30,15 +35,16 @@ class Api {
 
       return response;
     } on DioException catch (e) {
-      return e.response;
+      g.Get.snackbar("0", "${e.message}", duration: const Duration(seconds: 1));
     }
+    return null;
   }
 
-  Future<Response?> post({
-    required String endpoint,
-    required var body,
-  }) async {
-        final String? tokens = cc.getToken();
+  Future<Response?> post(
+      {required String endpoint,
+      required var body,
+      Map<String, dynamic>? header}) async {
+    final String? tokens = cc.getToken();
 
     // Map<String, dynamic> headers = {};
     // headers.addAll({"Authorization": "Bearer $tokens"});
@@ -49,6 +55,7 @@ class Api {
       Response response = await _dios.post(endpoint,
           data: body,
           options: Options(
+            headers: header,
             contentType: Headers.jsonContentType,
             responseType: ResponseType.json,
           ));
@@ -57,7 +64,30 @@ class Api {
       return e.response;
     }
   }
+  Future<Response?> patch(
+      {required String endpoint,
+      required var body,
+      Map<String, dynamic>? header}) async {
+    final String? tokens = cc.getToken();
 
+    // Map<String, dynamic> headers = {};
+    // headers.addAll({"Authorization": "Bearer $tokens"});
+
+    // if (token != null) {
+    // }
+    try {
+      Response response = await _dios.patch(endpoint,
+          data: body,
+          options: Options(
+            headers: header,
+            contentType: Headers.jsonContentType,
+            responseType: ResponseType.json,
+          ));
+      return response;
+    } on DioException catch (e) {
+      return e.response;
+    }
+  }
   Future<dynamic> put({
     required String endpoint,
     required Map<String, dynamic> body,

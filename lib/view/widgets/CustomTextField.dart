@@ -17,7 +17,7 @@ class CustomTextField extends StatelessWidget {
       {Key? key,
       required this.text,
       this.prefixIcon = const Icon(Icons.person),
-      this.suffixIcon ,
+      this.suffixIcon,
       this.type,
       this.initial,
       this.validate,
@@ -35,8 +35,7 @@ class CustomTextField extends StatelessWidget {
       keyboardType: type,
       obscureText: type == TextInputType.visiblePassword ? true : false,
       decoration: InputDecoration(
-        
-        suffixIcon:suffixIcon,
+        suffixIcon: suffixIcon,
         contentPadding: const EdgeInsets.symmetric(vertical: 15),
         prefixIcon: prefixIcon,
         labelText: text,
@@ -49,7 +48,7 @@ class CustomTextField extends StatelessWidget {
         ),
         border: OutlineInputBorder(
             borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(18)),
+            borderRadius: BorderRadius.circular(15)),
         filled: true,
         fillColor: Colors.grey[300],
       ),

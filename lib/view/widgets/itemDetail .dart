@@ -178,9 +178,9 @@ class ItemDetail3 extends StatelessWidget {
                   child: InkWell(
                     onTap: () {
                       if (!cc.isInWishList(product.id)) {
-                        // cc.add(product.id);
+                        cc.add(product.id);
                       } else {
-                        // cc.del(product.id);
+                        cc.del(product.id);
                       }
                     },
                     child: CircleAvatar(

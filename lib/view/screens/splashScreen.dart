@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:store_app/controllers/AuthenticationManager%20.dart';
+import 'package:store_app/utils/class/connectionCheck.dart';
+import 'package:store_app/view/screens/404.dart';
 import 'package:store_app/view/screens/onBorder.dart';
 
 class SplashView extends StatelessWidget {
@@ -9,6 +11,7 @@ class SplashView extends StatelessWidget {
   SplashView({super.key});
 
   Future<void> initializeSettings() async {
+    var x = _authmanager.conniction();
     _authmanager.checkLoginStatus();
     await Future.delayed(const Duration(seconds: 3));
   }
@@ -16,17 +19,19 @@ class SplashView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: initializeSettings(),
+      future: _authmanager.conniction(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return waitingView();
-        } else {
-          if (snapshot.hasError) {
-            return errorView(snapshot);
-          } else {
-            return const OnBoard();
-          }
+        } else if(snapshot.hasData && snapshot.data == true) {
+                      return const OnBoard();
+
         }
+        else{
+                                return  noConniction();
+
+        }
+        
       },
     );
   }
@@ -47,7 +52,7 @@ class SplashView extends StatelessWidget {
             child: SizedBox(
               height: 100,
               width: 100,
-              child: Image.asset("assets/images/progress.gif"),
+              child: Image.asset("assets/images/g1.gif"),
             ),
           ),
           const Text('Loading...'),

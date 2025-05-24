@@ -7,6 +7,8 @@ import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:store_app/controllers/homePage_viewmodel.dart';
 import 'package:store_app/models/poduct_model.dart';
 import 'package:store_app/view/screens/UserPage.dart';
+import 'package:store_app/view/screens/categoryLIstPage.dart';
+import 'package:store_app/view/widgets/catogoreWidget.dart';
 import 'package:store_app/view/widgets/itemDetail%20.dart';
 import 'package:store_app/view/widgets/CustomTextField.dart';
 import 'package:store_app/view/widgets/productListBuilder.dart';
@@ -86,42 +88,67 @@ class _pageOneState extends State<HomePage> {
                 height: 10,
               ),
             ),
-            // const SliverToBoxAdapter(
-            //   child: Text(
-            //     "Category",
-            //     style: TextStyle(
-            //       fontSize: 25,
-            //       fontWeight: FontWeight.bold,
-            //     ),
-            //   ),
-            // ),
-            // const SliverToBoxAdapter(
-            //   child: SizedBox(
-            //     height: 20,
-            //   ),
-            // ),
-            // SliverToBoxAdapter(
-            //   child: SizedBox(
-            //     height: 130,
-            //     width: double.infinity,
-            //     child: Obx(() {
-            //       if (!cc.loading.value) {
-            //         List<String> cat = cc.extractcategory(cc.product!);
-            //         return true
-            //             ? ListView.builder(
-            //                 scrollDirection: Axis.horizontal,
-            //                 itemCount: cat.length,
-            //                 itemBuilder: (BuildContext, i) {
-            //                   return catogore(name: cat[i].toString());
-            //                 },
-            //               )
-            //             : const Center(child: Text("no data"));
-            //       } else {
-            //         return const Center(child: CircularProgressIndicator());
-            //       }
-            //     }),
-            //   ),
-            // ),
+            SliverToBoxAdapter(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Category",
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Get.to(Categorylistpage());
+                    },
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          "View All",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.deepPurple,
+                            fontFamily: "Metropolis",
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+            const SliverToBoxAdapter(
+              child: SizedBox(
+                height: 20,
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 130,
+                width: double.infinity,
+                child: Obx(() {
+                  if (!cc.loading.value) {
+                    List<String> cat = cc.extractCategory(cc.Allproduct!);
+                    return true
+                        ? ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: 5,
+                            itemBuilder: (BuildContext, i) {
+                              return catogore(name: cat[i].toString());
+                            },
+                          )
+                        : const Center(child: Text("no data"));
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                }),
+              ),
+            ),
             SliverToBoxAdapter(
               child: Row(
                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,

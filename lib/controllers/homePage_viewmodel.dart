@@ -29,7 +29,25 @@ class HomeControllar extends GetxController {
     fetchProduct();
     super.onInit();
   }
+List<String> extractCategory(List<ProductData> productData) {
+    final Set<String> categories = {};
 
+    for (var product in productData) {
+      categories.add(product.category);
+    }
+
+    return categories.toList();
+  }
+  ProductData? Findproduct(String id) {
+    ProductData? product;
+    int index = _productLIst.indexWhere((element) => element.id == id);
+    print("object $index");
+
+    if (index != -1) {
+      product = _productLIst[index];
+      return product;
+    }
+  }
   void fetchAllProduct() async {
     try {
       int batch = 100;
@@ -68,6 +86,12 @@ class HomeControllar extends GetxController {
       return matchesQuery && matchesCategory && matchesMin && matchesMax;
     }).toList();
     update();
+  }
+  List<ProductData> cato(String name) {
+    List<ProductData> filter = _AllproductLIst
+        .where((element) => element.category.contains(name))
+        .toList(); // Filter items
+    return filter;
   }
 
   void fetchProduct() async {

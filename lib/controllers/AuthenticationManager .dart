@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:store_app/controllers/CacheManager%20.dart';
+import 'package:store_app/utils/class/connectionCheck.dart';
 
 class AuthenticationManager extends GetxController with CacheManager {
   final isLogged = false.obs;
@@ -7,6 +8,11 @@ class AuthenticationManager extends GetxController with CacheManager {
   void logOut() {
     isLogged.value = false;
     removeToken();
+  }
+
+  Future<bool> conniction() async {
+    bool x = await checkServerConnection().checkServe();
+    return x;
   }
 
   void login(String? token) async {

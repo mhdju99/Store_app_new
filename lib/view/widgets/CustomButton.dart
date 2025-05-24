@@ -5,7 +5,7 @@ class CustomButton extends StatelessWidget {
   final Widget chaild;
   void Function()? onPressed;
 
-   CustomButton({
+  CustomButton({
     Key? key,
     this.onPressed,
     required this.chaild,
@@ -14,22 +14,22 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 343,
-      height: 48,
+      width: 300,
+      height: 45,
       margin: const EdgeInsets.symmetric(horizontal: 1),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25),
-          color: Colors.red,
+          borderRadius: BorderRadius.circular(15),
+          color: Colors.deepPurple.shade800,
           boxShadow: const [
             BoxShadow(
-                color: Color.fromRGBO(211, 38, 38, 0.25),
-                spreadRadius: 1,
-                blurRadius: 9,
-                blurStyle: BlurStyle.solid)
+              color: Colors.black,
+              spreadRadius: 1,
+              blurRadius: 1,
+            )
           ],
-          border: Border.all(color: Colors.red)),
+          border: Border.all(color: const Color.fromARGB(255, 92, 91, 92))),
       child: MaterialButton(
-        disabledColor: Colors.amber,
+        disabledColor: Colors.purple,
 
         // padding:
         //     const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
@@ -40,4 +40,3 @@ class CustomButton extends StatelessWidget {
     );
   }
 }
-
