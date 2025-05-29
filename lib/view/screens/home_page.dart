@@ -2,15 +2,20 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
+
 import 'package:store_app/controllers/homePage_viewmodel.dart';
 import 'package:store_app/models/poduct_model.dart';
+import 'package:store_app/utils/constants/end_points.dart';
 import 'package:store_app/view/screens/UserPage.dart';
 import 'package:store_app/view/screens/categoryLIstPage.dart';
-import 'package:store_app/view/widgets/catogoreWidget.dart';
-import 'package:store_app/view/widgets/itemDetail%20.dart';
+import 'package:store_app/view/screens/searchScreen.dart';
 import 'package:store_app/view/widgets/CustomTextField.dart';
+import 'package:store_app/view/widgets/catogoreWidget.dart';
+import 'package:store_app/view/widgets/customText.dart';
+import 'package:store_app/view/widgets/itemDetail%20.dart';
 import 'package:store_app/view/widgets/productListBuilder.dart';
 import 'package:store_app/view/widgets/product_item.dart';
 
@@ -43,6 +48,7 @@ class _pageOneState extends State<HomePage> {
                       child: GestureDetector(
                     onTap: () {
                       showSearch(context: context, delegate: search(cc: cc));
+                      // Get.to(SearchScreen());
                     },
                     child: Container(
                       height: 80,
@@ -132,7 +138,7 @@ class _pageOneState extends State<HomePage> {
                 height: 130,
                 width: double.infinity,
                 child: Obx(() {
-                  if (!cc.loading.value) {
+                  if (!cc.loadingAll.value) {
                     List<String> cat = cc.extractCategory(cc.Allproduct!);
                     return true
                         ? ListView.builder(
@@ -205,8 +211,6 @@ class _pageOneState extends State<HomePage> {
 }
 
 class search extends SearchDelegate {
-  final formkey = GlobalKey<FormState>();
-
   List<ProductData> filter = [];
   HomeControllar cc;
   String? name, category;
@@ -224,12 +228,12 @@ class search extends SearchDelegate {
             query = "";
           },
           icon: const Icon(Icons.close)),
-      IconButton(
-        icon: const Icon(Icons.tune),
-        onPressed: () {
-          Filter_DIALOG();
-        },
-      ),
+      // IconButton(
+      //   icon: const Icon(Icons.tune),
+      //   onPressed: () {
+      //     Filter_DIALOG();
+      //   },
+      // ),
     ];
   }
 
@@ -257,18 +261,10 @@ class search extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    print("query");
-    print(query);
-    print("category");
-    print(category);
-    print("min");
-    print(min);
-    print("max");
-    print(max);
-
     cc.filterProducts(query: query, category: category, min: min, max: max);
 
-    return buildResuilt(filter: cc.filterproductLIst);
+    return buildResuilt(filter: cc.filterproductLIst,
+      nameQ: query,);
   }
 
   @override
@@ -329,8 +325,66 @@ class search extends SearchDelegate {
       );
     }
   }
+}
+
+class buildResuilt extends StatelessWidget {
+  String nameQ;
+  buildResuilt({
+    Key? key,
+    required this.nameQ,
+    required this.filter,
+  }) : super(key: key);
+
+  final List<ProductData> filter;
+  List<String> titles = ['category', 'price'];
+  List<int>? filterIndex;
+  HomeControllar cc = Get.put(HomeControllar());
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Filter_DIALOG();
+        },
+        label: const Text("Filter"),
+        icon: const Icon(Icons.filter_list),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Obx(() {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisExtent: 220,
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 8),
+                    itemCount: filter.length,
+                    itemBuilder: (c, index) {
+                      return SizedBox(
+                        height: 400,
+                        child: product_card2(
+                          product: cc.filterproductLIst[index],
+                        ),
+                      );
+                    }),
+              );
+            }),
+          ),
+        ],
+      ),
+    );
+  }
 
   Future<dynamic> Filter_DIALOG() {
+    final formkey = GlobalKey<FormState>();
+    String? name, category;
+
+    double min = 0.0, max = 10000;
     return Get.defaultDialog(
       title: "filter",
       content: Container(
@@ -384,7 +438,7 @@ class search extends SearchDelegate {
       onConfirm: () {
         formkey.currentState!.save();
         // cc.SearchProduct();
-        cc.filterProducts();
+        cc.filterProducts(category: category,max: max,min: min,query: nameQ );
         Get.back();
       },
       textConfirm: "ok",
@@ -392,57 +446,78 @@ class search extends SearchDelegate {
   }
 }
 
-class buildResuilt extends StatelessWidget {
-  buildResuilt({
-    super.key,
-    required this.filter,
-  });
-
-  final List<ProductData> filter;
-  List<String> titles = ['category', 'price'];
-  List<int>? filterIndex;
+class product_card2 extends StatelessWidget {
   HomeControllar cc = Get.put(HomeControllar());
+
+  ProductData product;
+
+  product_card2({
+    super.key,
+    required this.product,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ElevatedButton.icon(
-            onPressed: () {
-              // Filter_DIALOG(); // Open filter dialog when clicked
-            },
-            icon: const Icon(Icons.filter_list),
-            label: const Text("Filter"),
-            style: ElevatedButton.styleFrom(
-              // primary: Colors.blue,
-              padding: const EdgeInsets.symmetric(vertical: 12),
+    return InkWell(
+      onTap: () {
+        Get.to(ItemDetail3(product: product));
+      },
+      child: Card(
+        color: Colors.grey.shade300,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        elevation: 3,
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+                decoration: const BoxDecoration(),
+                width: double.infinity,
+                height: 150,
+                alignment: Alignment.topCenter,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10)),
+                  child: Image.network(
+                    "${EndPoints.getimage_endpoint}?productId=${product.id}&imageName=${product.imagesNames[0]}.jpg",
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+
+                    height: 160,
+                    // cc.Barnds[index].Image!,
+                  ),
+                )),
+            const SizedBox(
+              height: 4,
             ),
-          ),
-        ),
-        Expanded(
-          child: Obx(() {
-            print("updatet");
-            print("updatet");
-            return GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisExtent: 260,
-                    mainAxisSpacing: 20,
-                    crossAxisSpacing: 10),
-                itemCount: filter.length,
-                itemBuilder: (c, index) {
-                  return SizedBox(
-                    height: 600,
-                    child: product_card(
-                      product: cc.filterproductLIst[index],
+            Padding(
+              padding: const EdgeInsets.only(left: 11),
+              child: CustomText(
+                // text: cc.Barnds[index].BrandName!,
+                text: product.name,
+                fontSize: 18,
+                wight: FontWeight.bold,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 11, bottom: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "\$${product.price} ",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.orange,
                     ),
-                  );
-                });
-          }),
+                  )
+                ],
+              ),
+            )
+          ],
         ),
-      ],
+      ),
     );
   }
 }

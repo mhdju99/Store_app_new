@@ -23,6 +23,7 @@ class HomeControllar extends GetxController {
 
   double min = 0.0, max = 10000;
   var loading = false.obs;
+  var loadingAll = false.obs;
   @override
   void onInit() {
     fetchAllProduct();
@@ -51,14 +52,12 @@ List<String> extractCategory(List<ProductData> productData) {
   void fetchAllProduct() async {
     try {
       int batch = 100;
-      // loading(true);
+      loadingAll(true);
       bool hasMoredata = true;
       while (hasMoredata) {
         var data = await ProductService().getProduct(batch: batch);
-        print(batch);
         if (data!.isNotEmpty) {
           _AllproductLIst.addAll(data.toList());
-          print(_AllproductLIst.length);
 
           batch = batch + 100;
         } else {
@@ -66,7 +65,7 @@ List<String> extractCategory(List<ProductData> productData) {
         }
       }
     } finally {
-      // loading(false);
+      loadingAll(false);
     }
   }
 
@@ -109,21 +108,17 @@ List<String> extractCategory(List<ProductData> productData) {
 
   @override
   void nextPage() async {
-    print("<<<<<<<<$page");
     if (page != 500) {
       page = page + 100;
     }
-    loading(true);
 
     fetchProduct();
   }
 
   void prevPage() async {
-    print("<<<<<<<<$page");
     if (page != 100) {
       page = page - 100;
     }
-    loading(true);
 
     fetchProduct();
   }
