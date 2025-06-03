@@ -116,6 +116,13 @@ Widget _buildOriginalContent() {
                       fontWeight: FontWeight.w300,
                     ),
                   ),
+                  IconButton(
+                    icon: const Icon(
+                      Icons.cloud_upload,
+                      size: 60,
+                    ),
+                    onPressed: () {},
+                  )
                 ],
               ),
             ),
@@ -124,5 +131,4 @@ Widget _buildOriginalContent() {
       ),
     ),
   );
-  
 }

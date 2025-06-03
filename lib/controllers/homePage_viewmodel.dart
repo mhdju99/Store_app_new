@@ -9,7 +9,9 @@ import 'package:store_app/models/poduct_model.dart';
 
 class HomeControllar extends GetxController {
   CartController() {}
-
+  // var isLastBatch = false.obs;
+  // int offset = 0;
+  // final int batchSize = 20;
   int page = 100;
   final _productLIst = <ProductData>[].obs;
   List<ProductData>? get product => _productLIst;

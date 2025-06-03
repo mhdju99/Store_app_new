@@ -20,15 +20,17 @@ class catogore extends StatelessWidget {
         child: Column(
           children: [
             Container(
+              height: 75,
+              width: 75,
               decoration: BoxDecoration(
                 color: colers ? Colors.orange.shade200 : Colors.grey[300],
                 borderRadius: BorderRadius.circular(100),
               ),
-              padding: const EdgeInsets.all(7),
-              child: Icon(
-                find(name),
-                size: 50,
-              ),
+              padding: const EdgeInsets.all(12),
+              child: Image.asset(
+                  height: 50,
+                  width: 50,
+                  icon[name.toLowerCase()] ?? "assets/images/sneakers.png"),
             ),
             Text(
               name,
@@ -42,22 +44,11 @@ class catogore extends StatelessWidget {
     );
   }
 
-  IconData find(String name) {
-    print(name);
-    name = name.toLowerCase();
-
-    if (name == "laptops") {
-      return Icons.laptop;
-    } else if (name == "phone") {
-      return Icons.phone_android;
-    } else if (name == "camera") {
-      return Icons.camera_alt_outlined;
-    } else if (name == "routers") {
-      return Icons.route;
-    } else if (name == "security camera") {
-      return Icons.camera;
-    } else {
-      return Icons.apps_outlined;
-    }
-  }
+  final Map<String, String> icon = {
+    'outwear': "assets/images/jacket.png",
+    "t-shirt": "assets/images/t-shirt.png",
+    "Shoes": "assets/images/sneakers.png",
+    "hoodie": "assets/images/hoodie.png",
+    "shirt": "assets/images/tshirt.png",
+  };
 }

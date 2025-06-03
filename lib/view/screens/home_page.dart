@@ -33,7 +33,7 @@ class _pageOneState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Padding(
-      padding: const EdgeInsets.fromLTRB(16, 60, 16, 0),
+      padding: const EdgeInsets.fromLTRB(16, 50, 16, 0),
       child: RefreshIndicator(
         onRefresh: () async {
           cc.refresh();
@@ -43,6 +43,8 @@ class _pageOneState extends State<HomePage> {
           slivers: [
             SliverToBoxAdapter(
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
                       child: GestureDetector(
@@ -76,13 +78,16 @@ class _pageOneState extends State<HomePage> {
                     onTap: () {
                       Get.to(UserPage());
                     },
-                    child: const CircleAvatar(
-                      backgroundColor: Color.fromRGBO(224, 224, 224, 1),
-                      radius: 18,
-                      child: Icon(
-                        Icons.person_outlined,
-                        color: Colors.black,
-                        size: 25,
+                    child: const Padding(
+                      padding: EdgeInsets.only(bottom: 6),
+                      child: CircleAvatar(
+                        backgroundColor: Color.fromRGBO(224, 224, 224, 1),
+                        radius: 18,
+                        child: Icon(
+                          Icons.person,
+                          color: Colors.black,
+                          size: 25,
+                        ),
                       ),
                     ),
                   )
@@ -135,7 +140,7 @@ class _pageOneState extends State<HomePage> {
             ),
             SliverToBoxAdapter(
               child: SizedBox(
-                height: 130,
+                height: 110,
                 width: double.infinity,
                 child: Obx(() {
                   if (!cc.loadingAll.value) {
@@ -145,7 +150,9 @@ class _pageOneState extends State<HomePage> {
                             scrollDirection: Axis.horizontal,
                             itemCount: 5,
                             itemBuilder: (BuildContext, i) {
-                              return catogore(name: cat[i].toString());
+                              print(cat[i].toString());
+                              print(cat[i].length);
+                              return catogore(name: cat[i]);
                             },
                           )
                         : const Center(child: Text("no data"));
@@ -175,7 +182,7 @@ class _pageOneState extends State<HomePage> {
                     },
                     child: const Icon(
                       Icons.arrow_back_ios,
-                      size: 30,
+                      size: 25,
                     ),
                   ),
                   const SizedBox(
@@ -187,7 +194,7 @@ class _pageOneState extends State<HomePage> {
                       },
                       child: const Icon(
                         Icons.arrow_forward_ios,
-                        size: 30,
+                        size: 25,
                       ))
                   // GestureDetector(
                   //     onTap: () {
@@ -199,7 +206,7 @@ class _pageOneState extends State<HomePage> {
             ),
             const SliverToBoxAdapter(
               child: SizedBox(
-                height: 20,
+                height: 15,
               ),
             ),
             ProductListBuilder()
@@ -263,8 +270,10 @@ class search extends SearchDelegate {
   Widget buildResults(BuildContext context) {
     cc.filterProducts(query: query, category: category, min: min, max: max);
 
-    return buildResuilt(filter: cc.filterproductLIst,
-      nameQ: query,);
+    return buildResuilt(
+      filter: cc.filterproductLIst,
+      nameQ: query,
+    );
   }
 
   @override
@@ -438,7 +447,7 @@ class buildResuilt extends StatelessWidget {
       onConfirm: () {
         formkey.currentState!.save();
         // cc.SearchProduct();
-        cc.filterProducts(category: category,max: max,min: min,query: nameQ );
+        cc.filterProducts(category: category, max: max, min: min, query: nameQ);
         Get.back();
       },
       textConfirm: "ok",
