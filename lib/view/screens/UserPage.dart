@@ -62,26 +62,26 @@ class UserPage extends StatelessWidget {
             color: Colors.grey[200],
             child: Column(
               children: [
-                SizedBox(
-                  height: 40,
-                  child: InkWell(
-                    onTap: () {
-                      // Get.to(MyOredr());
-                    },
-                    child: const ListTile(
-                      leading: Icon(Icons.task_alt_sharp),
-                      title: Text(
-                        "My Order",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: "Metropolis",
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      trailing: Icon(Icons.arrow_right),
-                    ),
-                  ),
-                ),
+                // SizedBox(
+                //   height: 40,
+                //   child: InkWell(
+                //     onTap: () {
+                //       // Get.to(MyOredr());
+                //     },
+                //     child: const ListTile(
+                //       leading: Icon(Icons.task_alt_sharp),
+                //       title: Text(
+                //         "My Order",
+                //         style: TextStyle(
+                //           fontSize: 16,
+                //           fontFamily: "Metropolis",
+                //           fontWeight: FontWeight.w700,
+                //         ),
+                //       ),
+                //       trailing: Icon(Icons.arrow_right),
+                //     ),
+                //   ),
+                // ),
                 const Divider(),
                 InkWell(
                   onTap: () => Get.to(AddressPage()),

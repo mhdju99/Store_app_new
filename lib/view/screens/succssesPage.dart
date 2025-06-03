@@ -12,7 +12,7 @@ import 'package:store_app/view/widgets/buttonText.dart';
 class succssesPage extends StatelessWidget {
   succssesPage({super.key});
   AuthenticationManager cc = Get.find();
-  LandingPageController ll = Get.find();
+  LandingPageController ll = Get.put(LandingPageController());
   userController uu = Get.put(userController());
   @override
   Widget build(BuildContext context) {
